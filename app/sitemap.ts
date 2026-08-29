@@ -1,8 +1,10 @@
 import type { MetadataRoute } from 'next';
 import { projects } from '@/content/projects';
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '');
-  if (!base) return [];
+  const base = (
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    'https://wukang-cao-research.caka152005.chatgpt.site'
+  ).replace(/\/$/, '');
   const routes = [
     '',
     '/research',
