@@ -1,10 +1,10 @@
 'use client';
 
-import Link from 'next/link';
 import { ArrowUpRight, Image as ImageIcon } from 'lucide-react';
 import type { Project } from '@/content/types';
 import { localize } from '@/lib/content';
 import { useSite } from './site-context';
+import { FullPageLink } from './full-page-link';
 
 export function ProjectCard({
   project,
@@ -46,10 +46,13 @@ export function ProjectCard({
             <span key={item}>{item}</span>
           ))}
         </div>
-        <Link className="project-link" href={`/projects/${project.slug}`}>
+        <FullPageLink
+          className="project-link"
+          href={`/projects/${project.slug}`}
+        >
           {t.common.learnMore}
           <ArrowUpRight />
-        </Link>
+        </FullPageLink>
       </div>
     </article>
   );

@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Languages, Menu, MonitorCog, Moon, Sun } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -14,6 +13,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { LogoMark } from './logo';
+import { FullPageLink } from './full-page-link';
 import { useSite } from './site-context';
 
 export function SiteHeader() {
@@ -36,7 +36,7 @@ export function SiteHeader() {
   return (
     <header className="site-header">
       <div className="header-inner">
-        <Link
+        <FullPageLink
           className="brand"
           href="/"
           aria-label={language === 'zh' ? '曹武康首页' : 'Wukang Cao home'}
@@ -46,19 +46,19 @@ export function SiteHeader() {
             <strong>{language === 'zh' ? '曹武康' : 'Wukang Cao'}</strong>
             <small>PERCEPTION · SYSTEMS</small>
           </span>
-        </Link>
+        </FullPageLink>
         <nav
           className="desktop-nav"
           aria-label={language === 'zh' ? '主导航' : 'Primary navigation'}
         >
           {links.map(([href, label]) => (
-            <Link
+            <FullPageLink
               key={href}
               href={href}
               aria-current={active(href) ? 'page' : undefined}
             >
               {label}
-            </Link>
+            </FullPageLink>
           ))}
         </nav>
         <div className="header-actions">
@@ -122,9 +122,10 @@ export function SiteHeader() {
                     nativeButton={false}
                     key={href}
                     render={
-                      <Link
+                      <FullPageLink
                         href={href}
                         aria-current={active(href) ? 'page' : undefined}
+                        aria-label={label}
                       />
                     }
                   >

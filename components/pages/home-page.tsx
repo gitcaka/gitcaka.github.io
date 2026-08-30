@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import {
   ArrowRight,
   ArrowUpRight,
@@ -17,6 +16,7 @@ import { featuredProjects } from '@/content/projects';
 import { skillGroups } from '@/content/skills';
 import { localize } from '@/lib/content';
 import { ProjectCard } from '@/components/project-card';
+import { FullPageLink } from '@/components/full-page-link';
 import { ResearchScene } from '@/components/research-scene';
 import { SectionHeading } from '@/components/section-heading';
 import { useSite } from '@/components/site-context';
@@ -55,14 +55,14 @@ export function HomePage() {
           </h1>
           <p className="intro">{localize(profile.bio, language)}</p>
           <div className="hero-cta">
-            <Link className="primary-button" href="/projects">
+            <FullPageLink className="primary-button" href="/projects">
               {t.common.viewProjects}
               <ArrowUpRight />
-            </Link>
-            <Link className="text-button" href="/contact">
+            </FullPageLink>
+            <FullPageLink className="text-button" href="/contact">
               {language === 'zh' ? '联系我' : 'Contact Me'}
               <ArrowRight />
-            </Link>
+            </FullPageLink>
           </div>
           <div className="topic-row">
             {(language === 'zh'
@@ -124,10 +124,10 @@ export function HomePage() {
                 {language === 'zh' ? '20 次机器人闭环测试' : '20 Robotic Closed-Loop Tests'}
               </span>
             </div>
-            <Link href="/projects">
+            <FullPageLink href="/projects">
               {language === 'zh' ? '查看项目证据' : 'View Project Evidence'}
               <ArrowUpRight />
-            </Link>
+            </FullPageLink>
           </div>
         </div>
       </section>
@@ -164,10 +164,10 @@ export function HomePage() {
               title={t.home.projectsTitle}
               description={t.home.projectsSubtitle}
             />
-            <Link href="/projects">
+            <FullPageLink href="/projects">
               {t.nav.projects}
               <ArrowRight />
-            </Link>
+            </FullPageLink>
           </div>
           <div className="featured-grid">
             {featuredProjects.slice(0, 3).map((project, index) => (
@@ -213,10 +213,10 @@ export function HomePage() {
             <small>PERCEPTION → REASONING → ACTION</small>
             <h2>{t.home.closing}</h2>
           </div>
-          <Link href="/about">
+          <FullPageLink href="/about">
             {t.nav.about}
             <ArrowUpRight />
-          </Link>
+          </FullPageLink>
         </div>
       </section>
     </main>

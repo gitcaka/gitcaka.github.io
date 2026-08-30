@@ -1,10 +1,10 @@
 'use client';
 
-import Link from 'next/link';
 import { ArrowLeft, ExternalLink, Image as ImageIcon } from 'lucide-react';
 import type { Project } from '@/content/types';
 import { localize } from '@/lib/content';
 import { useSite } from '@/components/site-context';
+import { FullPageLink } from '@/components/full-page-link';
 
 export function ProjectDetailPage({ project }: { project: Project }) {
   const { language, t } = useSite();
@@ -26,10 +26,10 @@ export function ProjectDetailPage({ project }: { project: Project }) {
   return (
     <main id="top" className="project-detail page-main">
       <div className="content-width">
-        <Link className="back-link" href="/projects">
+        <FullPageLink className="back-link" href="/projects">
           <ArrowLeft />
           {t.common.backProjects}
-        </Link>
+        </FullPageLink>
         <section className="project-detail-hero">
           <div className="project-detail-copy">
             <div className="project-meta">

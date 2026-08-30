@@ -1,9 +1,9 @@
 'use client';
 
-import Link from 'next/link';
 import { ArrowUp } from 'lucide-react';
 import { LogoMark } from './logo';
 import { useSite } from './site-context';
+import { FullPageLink } from './full-page-link';
 
 export function SiteFooter() {
   const { language, t } = useSite();
@@ -25,13 +25,13 @@ export function SiteFooter() {
           <span>{t.footer.truth}</span>
           <span>© {new Date().getFullYear()} Wukang Cao</span>
         </div>
-        <Link
+        <FullPageLink
           href="#top"
           className="back-top"
           aria-label={language === 'zh' ? '返回顶部' : 'Back to top'}
         >
           <ArrowUp />
-        </Link>
+        </FullPageLink>
       </div>
     </footer>
   );

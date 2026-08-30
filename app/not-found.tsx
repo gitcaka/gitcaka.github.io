@@ -1,7 +1,7 @@
 'use client';
-import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { useSite } from '@/components/site-context';
+import { FullPageLink } from '@/components/full-page-link';
 export default function NotFound() {
   const { language } = useSite();
   return (
@@ -15,10 +15,10 @@ export default function NotFound() {
           ? '返回主页，继续查看个人经历与项目。'
           : 'Return home to continue exploring my experience and projects.'}
       </p>
-      <Link href="/">
+      <FullPageLink href="/">
         <ArrowLeft />
         {language === 'zh' ? '返回首页' : 'Back home'}
-      </Link>
+      </FullPageLink>
     </main>
   );
 }
