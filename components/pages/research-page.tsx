@@ -40,8 +40,8 @@ export function ResearchPage() {
                   )}
                   {area.status === 'active'
                     ? language === 'zh'
-                      ? '持续研究'
-                      : 'Active'
+                      ? '核心能力'
+                      : 'Core'
                     : language === 'zh'
                       ? '探索中'
                       : 'Exploring'}
@@ -58,11 +58,11 @@ export function ResearchPage() {
           ))}
         </div>
         <section className="research-principle">
-          <span>GROUNDING PRINCIPLE</span>
+          <span>ENGINEERING PRINCIPLE</span>
           <blockquote>
             {language === 'zh'
-              ? '大模型输出只有在传感器证据、通信预算和可复现实验的约束下，才能成为可靠的协同信息。'
-              : 'Model outputs become reliable cooperative information only when constrained by sensor evidence, communication budgets, and reproducible experiments.'}
+              ? '算法价值不仅写在模型结构里，也要体现在可复现指标、闭环行为和真实系统的稳定运行中。'
+              : 'Algorithmic value should appear not only in model architecture, but also in reproducible metrics, closed-loop behavior, and stable system operation.'}
           </blockquote>
         </section>
       </div>

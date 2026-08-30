@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import { ResearchPage } from '@/components/pages/research-page';
 export const metadata: Metadata = {
-  title: '研究 Research',
+  title: '专业方向 Professional Focus',
   description:
-    '曹武康围绕协同感知、多模态驾驶推理、生成式轨迹规划与自主系统验证形成的研究路线。',
+    '曹武康面向自动驾驶感知、协同智能、仿真评测与机器人系统形成的岗位能力主线。',
 };
 export default function Page() {
   return <ResearchPage />;

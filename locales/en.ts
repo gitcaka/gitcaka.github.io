@@ -1,7 +1,7 @@
 export const en = {
   nav: {
     home: 'Home',
-    research: 'Research',
+    research: 'Focus',
     projects: 'Projects',
     experience: 'Experience',
     outputs: 'Outputs',
@@ -11,7 +11,7 @@ export const en = {
   },
   common: {
     learnMore: 'View details',
-    viewResearch: 'Explore My Research',
+    viewResearch: 'View Career Focus',
     viewProjects: 'View Selected Projects',
     backProjects: 'Back to projects',
     ongoing: 'Ongoing',
@@ -23,12 +23,12 @@ export const en = {
   },
   theme: { dark: 'Dark', light: 'Light', system: 'System', label: 'Theme' },
   home: {
-    researchTitle: 'Current Research',
-    researchKicker: 'ONGOING RESEARCH',
+    researchTitle: 'Career Focus',
+    researchKicker: 'OPEN TO OPPORTUNITIES',
     researchSummary:
-      'Addressing occlusion and incomplete evidence in complex traffic, with a focus on complementary vehicle viewpoints, reliable information sharing, and evidence-constrained multimodal reasoning.',
-    methodTitle: 'From Research Questions to Working Systems',
-    methodSubtitle: 'Connecting methods, code, experiments, and systems.',
+      'Targeting roles in autonomous-driving perception, simulation and evaluation, multimodal/VLM systems, and robotics—with an emphasis on reproducible models, quantitative experiments, closed-loop evaluation, and system integration.',
+    methodTitle: 'From Problems to Verifiable Engineering Results',
+    methodSubtitle: 'Understand the problem, build the system, and validate it with data and closed-loop evidence.',
     stages: [
       {
         title: 'Understand',
@@ -45,24 +45,24 @@ export const en = {
     ],
     projectsTitle: 'Selected Projects',
     projectsSubtitle:
-      'Research direction and engineering validation, developed in parallel.',
-    skillsTitle: 'Capability Map',
-    closing: 'Turning “why” into something that runs.',
+      'Quantified work across vision, cooperative perception, simulation, and robotics.',
+    skillsTitle: 'Role-Relevant Capabilities',
+    closing: 'Ready to bring reproducible, verifiable work into real products and engineering teams.',
   },
   page: {
-    researchTitle: 'Research Route',
+    researchTitle: 'Professional Focus',
     researchIntro:
-      'Starting from cooperative perception under limited visibility, moving through evidence-grounded semantic reasoning and generative planning, and ending with validation in simulation or physical systems.',
+      'A role-oriented capability path across autonomous-driving perception, cooperative intelligence, simulation evaluation, and robotics.',
     projectsTitle: 'Selected Projects',
     projectsIntro:
-      'A focused set of real projects that show research continuity, system understanding, and engineering validation.',
+      'A focused set of real projects demonstrating algorithms, systems understanding, implementation, and quantitative validation.',
     additional: 'Additional Engineering Work',
-    experienceTitle: 'Experience',
+    experienceTitle: 'Education & Experience',
     experienceIntro:
-      'A research and engineering trajectory organized around problems, implementation, and validation. Unprovided education and employment details are not shown.',
+      'From an undergraduate degree in transportation equipment and control engineering to graduate work in autonomous driving, intelligent transportation, and robotics.',
     outputsTitle: 'Outputs',
     outputsIntro:
-      'Verified ongoing research, software systems, and competition outcomes—without invented papers, patents, or acceptance claims.',
+      'Published papers, competition awards, and quantified results verified against the current résumé.',
     notesTitle: 'Technical Notes',
     notesIntro:
       'A home for real reproduction, learning, and debugging records.',
@@ -71,10 +71,10 @@ export const en = {
       'The content structure is ready. Real articles can be promoted from draft when complete.',
     aboutTitle: 'About',
     aboutIntro:
-      'Connecting research questions, code, experiment design, and system integration for autonomous mobility.',
+      'An autonomous-driving candidate who values reproducibility, metrics, and system validation.',
     contactTitle: 'Contact',
     contactIntro:
-      'Open to discussions on cooperative perception, autonomous driving, and intelligent robotic systems.',
+      'Open to opportunities in autonomous-driving perception, simulation evaluation, multimodal systems, and robotics. Email is the best way to reach me.',
     contactEmpty: 'Contact details are not public yet',
     contactEmptyBody:
       'Verified email or academic profiles will appear automatically when added to the configuration.',
@@ -93,8 +93,8 @@ export const en = {
     tech: 'Technologies',
   },
   footer: {
-    line: 'Cooperative Perception · Multimodal Reasoning · Autonomous Planning · System Validation',
+    line: 'Autonomous Perception · Simulation Evaluation · Multimodal Systems · Robotics',
     truth:
-      'Content reflects verified projects and their current research status.',
+      'This personal site reflects résumé-backed projects and verifiable results.',
   },
 } as const;

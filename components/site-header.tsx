@@ -25,7 +25,6 @@ export function SiteHeader() {
     ['/projects', t.nav.projects],
     ['/experience', t.nav.experience],
     ['/outputs', t.nav.outputs],
-    ['/notes', t.nav.notes],
     ['/about', t.nav.about],
     ['/contact', t.nav.contact],
   ] as const;
@@ -45,7 +44,7 @@ export function SiteHeader() {
           <LogoMark />
           <span>
             <strong>{language === 'zh' ? '曹武康' : 'Wukang Cao'}</strong>
-            <small>COOPERATIVE INTELLIGENCE</small>
+            <small>PERCEPTION · SYSTEMS</small>
           </span>
         </Link>
         <nav
@@ -108,8 +107,8 @@ export function SiteHeader() {
                 </SheetTitle>
                 <SheetDescription>
                   {language === 'zh'
-                    ? '面向自主移动的协同智能'
-                    : 'Cooperative intelligence for autonomous mobility'}
+                    ? '自动驾驶感知与智能系统'
+                    : 'Autonomous perception and intelligent systems'}
                 </SheetDescription>
               </SheetHeader>
               <nav

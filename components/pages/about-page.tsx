@@ -12,35 +12,35 @@ export function AboutPage() {
     language === 'zh'
       ? [
           [
-            '阅读与修改自动驾驶、机器人相关代码',
-            '围绕真实系统定位规则、坐标链路与执行路径。',
+            '视觉算法与实验复现',
+            '使用 PyTorch、CUDA、YOLO 与 Transformer 完成训练、消融和指标评测。',
           ],
           [
-            '研究与技术路线一致性',
-            '从问题定义出发安排基线、方法、实验和消融。',
+            '自动驾驶闭环评测',
+            '使用 CARLA 组织多路线、成对对照、多随机种子复现和安全验证。',
           ],
-          ['算法实验与系统联调', '连接模型训练、仿真验证和真实硬件调试。'],
+          ['机器人系统联调', '连接 ROS、视觉定位、机械臂、移动底盘和串口设备。'],
           [
-            '工程部署与环境调试',
-            '在 Linux、Docker 与 GPU 环境中部署和排查项目。',
+            '工程部署与问题定位',
+            '在 Linux、GPU 服务器与 Jetson 平台上部署、复现并定位系统问题。',
           ],
         ]
       : [
           [
-            'Reading and modifying autonomous-driving and robotics code',
-            'Tracing rules, coordinate chains, and execution paths in real systems.',
+            'Vision algorithms and reproducible experiments',
+            'Training, ablation, and metric evaluation with PyTorch, CUDA, YOLO, and Transformers.',
           ],
           [
-            'Research–method alignment',
-            'Organizing baselines, methods, experiments, and ablations from the research question.',
+            'Autonomous-driving closed-loop evaluation',
+            'Multi-route paired comparisons, multi-seed reproduction, and safety validation in CARLA.',
           ],
           [
-            'Algorithm experiments and system integration',
-            'Connecting model training, simulation, and physical-hardware debugging.',
+            'Robotics system integration',
+            'Connecting ROS, visual localization, manipulators, mobile bases, and serial devices.',
           ],
           [
-            'Deployment and environment debugging',
-            'Deploying and troubleshooting projects across Linux, Docker, and GPU environments.',
+            'Engineering deployment and diagnosis',
+            'Deploying, reproducing, and diagnosing systems on Linux, GPU servers, and Jetson platforms.',
           ],
         ];
   const icons = [Code2, Crosshair, Network, Wrench];
@@ -55,23 +55,23 @@ export function AboutPage() {
             <div className="monogram-aside">
               WC
               <span>
-                PERCEPTION
+                ALGORITHMS
                 <br />
-                REASONING
+                SYSTEMS
                 <br />
-                ACTION
+                VALIDATION
               </span>
             </div>
           }
         />
         <section className="about-statement">
           <span>
-            {language === 'zh' ? '我关注的问题' : 'THE QUESTION I FOCUS ON'}
+            {language === 'zh' ? '我能带来的价值' : 'WHAT I BRING'}
           </span>
           <h2>
             {language === 'zh'
-              ? '车辆在遮挡、信息不完整和复杂交互环境中，如何借助协作信息和语义推理获得更可靠的理解与决策。'
-              : 'How can vehicles use cooperative information and semantic reasoning to build more reliable understanding and decisions under occlusion, incomplete evidence, and complex interaction?'}
+              ? '不止完成模型训练，还能沿着数据、算法、仿真与硬件链路，把结果推进到可复现、可解释、可运行。'
+              : 'Beyond training models, I connect data, algorithms, simulation, and hardware to make results reproducible, explainable, and runnable.'}
           </h2>
         </section>
         <div className="about-grid">
@@ -79,8 +79,8 @@ export function AboutPage() {
             <span>{language === 'zh' ? '我的工作方式' : 'HOW I WORK'}</span>
             <p>
               {language === 'zh'
-                ? '从研究问题出发，阅读和复现方法，完成代码实现、实验设计，并尽可能在仿真或真实系统中验证。'
-                : 'I start from the research question, read and reproduce relevant methods, implement code, design experiments, and validate in simulation or physical systems wherever possible.'}
+                ? '我习惯先明确问题与指标，再跑通基线、缩小修改边界、组织对照和消融，最后用仿真闭环或真实硬件检查结果。'
+                : 'I define the problem and metrics, reproduce the baseline, keep changes scoped, organize controls and ablations, and finally check results in a simulation loop or on physical hardware.'}
             </p>
             <blockquote>{localize(profile.statement, language)}</blockquote>
           </section>

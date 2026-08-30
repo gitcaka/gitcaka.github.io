@@ -1,7 +1,7 @@
 export const zh = {
   nav: {
     home: '首页',
-    research: '研究',
+    research: '方向',
     projects: '项目',
     experience: '经历',
     outputs: '成果',
@@ -11,7 +11,7 @@ export const zh = {
   },
   common: {
     learnMore: '查看详情',
-    viewResearch: '查看我的研究',
+    viewResearch: '查看求职方向',
     viewProjects: '浏览代表项目',
     backProjects: '返回项目',
     ongoing: '在研',
@@ -22,12 +22,12 @@ export const zh = {
   },
   theme: { dark: '深色', light: '浅色', system: '跟随系统', label: '主题' },
   home: {
-    researchTitle: '当前研究',
-    researchKicker: 'ONGOING RESEARCH',
+    researchTitle: '求职方向',
+    researchKicker: 'OPEN TO OPPORTUNITIES',
     researchSummary:
-      '面向复杂交通环境中的遮挡与信息不完整问题，研究车辆间的视角互补与可靠信息共享，并探索多模态大模型在语义理解中的受约束作用。',
-    methodTitle: '从研究问题到可运行系统',
-    methodSubtitle: '同时关注方法、代码、实验与系统。',
+      '面向自动驾驶感知算法、仿真评测、多模态/VLM 与机器人系统岗位，强调可复现模型、量化实验、闭环评测和软硬件联调。',
+    methodTitle: '从问题到可验证的工程结果',
+    methodSubtitle: '理解问题、实现系统、用数据与闭环结果验证。',
     stages: [
       {
         title: 'Understand',
@@ -40,32 +40,32 @@ export const zh = {
       },
     ],
     projectsTitle: '精选项目',
-    projectsSubtitle: '研究主线与工程验证并行推进。',
-    skillsTitle: '研究能力图谱',
-    closing: '把“为什么”落实到“如何运行”。',
+    projectsSubtitle: '用量化结果呈现视觉算法、协同感知、仿真评测与机器人实践。',
+    skillsTitle: '岗位能力图谱',
+    closing: '期待把可复现、可验证的能力带到真实产品与工程团队。',
   },
   page: {
-    researchTitle: '研究路线',
+    researchTitle: '专业方向',
     researchIntro:
-      '从视距受限下的协同感知出发，经过证据约束的语义推理与生成式规划，最终在仿真或真实系统中验证。',
+      '围绕自动驾驶感知、协同智能、仿真评测与机器人系统形成的岗位能力主线。',
     projectsTitle: '代表项目',
-    projectsIntro: '精选能够说明研究主线、系统理解和工程验证能力的真实项目。',
+    projectsIntro: '精选能够说明算法能力、系统理解、工程实现与量化验证的真实项目。',
     additional: '更多工程实践',
-    experienceTitle: '经历',
+    experienceTitle: '教育与经历',
     experienceIntro:
-      '以问题、实现和验证为线索整理科研与工程轨迹；未提供的学校、学位和任职信息不公开展示。',
+      '从交通设备与控制工程本科，到交通运输硕士阶段的自动驾驶、智能交通与机器人实践。',
     outputsTitle: '成果',
     outputsIntro:
-      '记录真实在研课题、软件系统与竞赛成果；未虚构论文、专利或录用状态。',
+      '公开展示已发表论文、竞赛获奖和经简历核对的量化结果。',
     notesTitle: '技术笔记',
     notesIntro: '用于后续整理真实的学习、复现与调试记录。',
     notesEmpty: '暂无已发布笔记',
     notesEmptyBody: '第一版已建立内容结构。真实文章完成后可从草稿转为公开。',
     aboutTitle: '关于我',
     aboutIntro:
-      '围绕自主移动系统，将研究问题、代码实现、实验设计与系统联调连接起来。',
+      '一名重视复现、指标与系统验证的自动驾驶方向求职者。',
     contactTitle: '联系',
-    contactIntro: '欢迎围绕智能网联、协同感知、自动驾驶与机器人系统进行交流。',
+    contactIntro: '正在寻找自动驾驶感知、仿真评测、多模态与机器人系统相关机会，欢迎邮件联系。',
     contactEmpty: '联系方式尚未公开',
     contactEmptyBody: '真实邮箱或学术主页补充到配置后，入口会自动显示。',
   },
@@ -83,7 +83,7 @@ export const zh = {
     tech: '使用技术',
   },
   footer: {
-    line: '协同感知 · 多模态推理 · 自动驾驶规划 · 自主系统验证',
-    truth: '内容以真实项目与当前研究状态为准。',
+    line: '自动驾驶感知 · 仿真评测 · 多模态系统 · 机器人工程',
+    truth: '个人主页内容以简历与可核对项目结果为准。',
   },
 } as const;

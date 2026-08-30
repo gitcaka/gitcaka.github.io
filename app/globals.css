@@ -430,8 +430,26 @@ a:focus-visible {
   background: var(--cyan-bright);
   box-shadow: 0 0 8px var(--cyan-bright);
 }
+.career-badge {
+  width: max-content;
+  margin-top: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 11px;
+  color: var(--cyan);
+  background: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--cyan) 35%, var(--line));
+  border-radius: 999px;
+  font: 10px ui-monospace, Consolas, monospace;
+  letter-spacing: 0.08em;
+}
+.career-badge svg {
+  width: 14px;
+  height: 14px;
+}
 .role {
-  margin: 36px 0 14px;
+  margin: 20px 0 14px;
   color: var(--muted-foreground);
   font-size: 15px;
 }
@@ -1538,6 +1556,35 @@ a:focus-visible {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 18px;
+}
+.contact-availability {
+  margin-top: 48px;
+  padding: 24px 28px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  color: var(--foreground);
+  background: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--cyan) 35%, var(--line));
+  border-radius: 14px;
+}
+.contact-availability > svg {
+  width: 24px;
+  color: var(--cyan);
+  flex: none;
+}
+.contact-availability div {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.contact-availability span,
+.contact-grid a > span {
+  color: var(--muted-foreground);
+  font-size: 12px;
+}
+.contact-availability span {
+  line-height: 1.6;
 }
 .contact-grid a {
   min-height: 150px;

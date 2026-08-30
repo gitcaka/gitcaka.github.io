@@ -5,6 +5,7 @@ import {
   ArrowRight,
   ArrowUpRight,
   Braces,
+  BriefcaseBusiness,
   CheckCircle2,
   Eye,
   FlaskConical,
@@ -26,18 +27,22 @@ export function HomePage() {
   const { language, t } = useSite();
   const heroLines =
     language === 'zh'
-      ? ['让车辆看见', '遮挡之外，', '连接感知、推理与行动。']
+      ? ['面向自动驾驶，', '把感知算法', '做成可验证系统。']
       : [
-          'Beyond line of sight—',
-          'connecting perception,',
-          'reasoning, and action.',
+          'Building perception',
+          'for autonomous driving',
+          'into validated systems.',
         ];
   return (
     <main id="top">
       <section className="home-hero content-width">
         <div className="hero-copy">
           <div className="eyebrow">
-            <span /> COOPERATIVE INTELLIGENCE FOR AUTONOMOUS MOBILITY
+            <span /> OPEN TO AUTONOMOUS DRIVING &amp; ROBOTICS ROLES
+          </div>
+          <div className="career-badge">
+            <BriefcaseBusiness />
+            {language === 'zh' ? '求职中 · 2026' : 'OPEN TO WORK · 2026'}
           </div>
           <p className="role">{localize(profile.role, language)}</p>
           <h1>
@@ -50,12 +55,12 @@ export function HomePage() {
           </h1>
           <p className="intro">{localize(profile.bio, language)}</p>
           <div className="hero-cta">
-            <Link className="primary-button" href="/research">
-              {t.common.viewResearch}
+            <Link className="primary-button" href="/projects">
+              {t.common.viewProjects}
               <ArrowUpRight />
             </Link>
-            <Link className="text-button" href="/projects">
-              {t.common.viewProjects}
+            <Link className="text-button" href="/contact">
+              {language === 'zh' ? '联系我' : 'Contact Me'}
               <ArrowRight />
             </Link>
           </div>
@@ -64,16 +69,16 @@ export function HomePage() {
               ? [
                   '协同感知',
                   '多模态推理',
-                  '轨迹规划',
-                  'ROS 2 与机器人',
-                  '自动驾驶系统',
+                  'CARLA 闭环评测',
+                  '视觉目标检测',
+                  'ROS 与机器人',
                 ]
               : [
                   'Cooperative Perception',
                   'Multimodal Reasoning',
-                  'Trajectory Planning',
-                  'ROS 2 & Robotics',
-                  'Autonomous-Driving Systems',
+                  'CARLA Closed-Loop Evaluation',
+                  'Visual Object Detection',
+                  'ROS & Robotics',
                 ]
             ).map((item) => (
               <span key={item}>{item}</span>
@@ -92,35 +97,35 @@ export function HomePage() {
             />
             <span className="ongoing-badge">
               <i />
-              {t.common.ongoing}
+              {language === 'zh' ? '可随时沟通' : 'AVAILABLE TO CONNECT'}
             </span>
           </div>
           <div className="current-card">
-            <span className="card-number">R / 01</span>
+            <span className="card-number">FIT / 01</span>
             <h2>
               {language === 'zh'
-                ? '视距受限下大模型驱动的协同感知方法研究'
-                : 'LLM-Driven Cooperative Perception under Limited Visibility'}
+                ? '从视觉算法到闭环系统验证'
+                : 'From Vision Algorithms to Closed-Loop Validation'}
             </h2>
             <p>{t.home.researchSummary}</p>
             <div className="evidence-row">
               <span>
                 <FlaskConical />
                 {language === 'zh'
-                  ? '方法与实验设计'
-                  : 'Method & Experiment Design'}
+                  ? '2 篇 SCI 论文'
+                  : '2 SCI Papers'}
               </span>
               <span>
                 <Layers3 />
-                {language === 'zh' ? '多车信息协同' : 'Multi-Agent Cooperation'}
+                {language === 'zh' ? '10 次多随机种子复现' : '10 Multi-Seed Reproductions'}
               </span>
               <span>
                 <CheckCircle2 />
-                {language === 'zh' ? '证据约束' : 'Evidence Grounding'}
+                {language === 'zh' ? '20 次机器人闭环测试' : '20 Robotic Closed-Loop Tests'}
               </span>
             </div>
-            <Link href="/research">
-              {t.common.viewResearch}
+            <Link href="/projects">
+              {language === 'zh' ? '查看项目证据' : 'View Project Evidence'}
               <ArrowUpRight />
             </Link>
           </div>
@@ -178,7 +183,7 @@ export function HomePage() {
 
       <section className="section-pad content-width">
         <SectionHeading
-          kicker="RESEARCH · SYSTEMS · ENGINEERING"
+          kicker="ALGORITHMS · SYSTEMS · ENGINEERING"
           title={t.home.skillsTitle}
           description={t.common.usedInWork}
         />

@@ -1,12 +1,13 @@
 'use client';
 
-import { Award, FileCode2, FlaskConical, Layers3 } from 'lucide-react';
+import { Award, BookOpen, FileCode2, FlaskConical, Layers3 } from 'lucide-react';
 import { outputs } from '@/content/outputs';
 import { localize } from '@/lib/content';
 import { PageHero } from '@/components/page-hero';
 import { useSite } from '@/components/site-context';
 
 const icons = {
+  publication: BookOpen,
   research: FlaskConical,
   software: FileCode2,
   award: Award,

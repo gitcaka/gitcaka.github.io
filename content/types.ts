@@ -9,6 +9,7 @@ export interface Profile {
   tagline: LocalizedText;
   bio: LocalizedText;
   statement: LocalizedText;
+  targetRoles: LocalizedText[];
   avatar?: string;
   resume?: string;
 }
@@ -62,7 +63,7 @@ export interface ExperienceItem {
 
 export interface Output {
   id: string;
-  type: 'research' | 'software' | 'award' | 'report';
+  type: 'publication' | 'research' | 'software' | 'award' | 'report';
   title: LocalizedText;
   year?: number;
   status: LocalizedText;

@@ -7,9 +7,9 @@ import { SiteProviders } from '@/components/site-context';
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ??
   'https://wukang-cao-research.caka152005.chatgpt.site';
-const siteTitle = '曹武康｜智能网联、协同感知与自动驾驶研究';
+const siteTitle = '曹武康｜自动驾驶感知与智能系统个人主页';
 const siteDescription =
-  '曹武康的科研与工程主页，关注协同感知、多模态推理、自动驾驶规划与机器人系统。';
+  '曹武康的中英文个人主页：交通运输硕士生，求职方向为自动驾驶感知、仿真评测、多模态/VLM 与机器人系统工程。';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -18,11 +18,14 @@ export const metadata: Metadata = {
     template: '%s · 曹武康 Wukang Cao',
   },
   description: siteDescription,
-  applicationName: 'Wukang Cao Research Portfolio',
+  applicationName: 'Wukang Cao Personal Portfolio',
   keywords: [
     'Cooperative Perception',
     'Intelligent Connected Vehicles',
     'Autonomous Driving',
+    'Computer Vision',
+    'CARLA',
+    'ROS',
     'Multimodal Reasoning',
     'Robotics',
   ],
@@ -42,15 +45,15 @@ export const metadata: Metadata = {
         url: '/og.png',
         width: 1200,
         height: 630,
-        alt: '曹武康 · Wukang Cao — Cooperative Intelligence for Autonomous Mobility',
+        alt: '曹武康 · Wukang Cao — Autonomous Driving Perception and Intelligent Systems',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Wukang Cao | Cooperative Intelligence and Autonomous Driving',
+    title: 'Wukang Cao | Autonomous Driving Perception & Intelligent Systems',
     description:
-      'Research in cooperative perception, multimodal reasoning, autonomous planning, and robotic systems.',
+      'Personal portfolio for autonomous-driving perception, simulation evaluation, multimodal systems, and robotics.',
     images: ['/og.png'],
   },
 };

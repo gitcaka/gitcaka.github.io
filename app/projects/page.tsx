@@ -3,7 +3,7 @@ import { ProjectsPage } from '@/components/pages/projects-page';
 export const metadata: Metadata = {
   title: '项目 Projects',
   description:
-    '曹武康在协同感知、自动驾驶规划、智能交通、Apollo 与 ROS 2 机器人系统中的代表项目。',
+    '曹武康在自动驾驶视觉感知、CARLA 闭环评测、C-V2X 协同智能与 ROS 机器人系统中的代表项目。',
 };
 export default function Page() {
   return <ProjectsPage />;

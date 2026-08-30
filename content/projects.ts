@@ -2,450 +2,216 @@ import type { Project } from './types';
 
 export const projects: Project[] = [
   {
-    id: 'coop-llm',
-    slug: 'llm-cooperative-perception',
+    id: 'coop-vlm',
+    slug: 'multimodal-cooperative-driving',
     featured: true,
     emphasis: 'primary',
     title: {
-      zh: '视距受限下大模型驱动的协同感知方法研究',
-      en: 'LLM-Driven Cooperative Perception under Limited Visibility',
+      zh: '多模态大模型协同感知与轨迹规划',
+      en: 'Multimodal Cooperative Perception and Trajectory Planning',
     },
     summary: {
-      zh: '围绕遮挡场景下的 V2V 协同感知，探索由多模态大模型提供语义先验，并用可观测证据约束其影响。',
-      en: 'Investigating V2V cooperative perception under occlusion, where multimodal models provide semantic priors whose influence remains constrained by observable evidence.',
+      zh: '在 CARLA 中搭建双车协同闭环，围绕大模型语义协议、异常帧处理与轨迹安全机制完成多随机种子复现和成对评测。',
+      en: 'Built a dual-vehicle CARLA closed loop and evaluated multimodal semantic protocols, anomalous-frame handling, and trajectory safeguards through multi-seed reproductions and paired runs.',
     },
-    category: { zh: '研究生在研课题', en: 'Graduate Research Project' },
+    category: { zh: '国家自然科学基金项目', en: 'NSFC Project' },
     status: { zh: '在研', en: 'Ongoing' },
+    period: { zh: '2025.10 — 至今', en: 'Oct 2025 — Present' },
     role: {
-      zh: '负责问题定义、方法设计、代码实现、实验设计与消融验证规划',
-      en: 'Responsible for problem formulation, method design, implementation, experiment design, and ablation planning',
+      zh: '负责本地 VLM 部署、协同语义协议修正、安全机制实现、复现实验与 CARLA 双车闭环评测',
+      en: 'Responsible for local VLM deployment, cooperative semantic-protocol fixes, safety mechanisms, reproducibility runs, and dual-vehicle CARLA evaluation',
     },
-    technologies: [
-      'OpenCOOD',
-      'V2X',
-      'PyTorch',
-      'Vision-Language Models',
-      'CARLA',
-    ],
+    technologies: ['PyTorch', 'CUDA', 'CARLA', 'Qwen2.5-VL', 'LangCoop', 'V2V-GoT'],
     highlights: {
-      zh: [
-        '视距受限与遮挡场景',
-        'V2V 信息选择与可靠性',
-        '语义先验、软偏置与证据约束',
-      ],
-      en: [
-        'Limited visibility and occlusion',
-        'V2V information selection and reliability',
-        'Semantic priors, soft biases, and evidence constraints',
-      ],
+      zh: ['10 次单 GPU 多随机种子复现', '平均 DS 37.50 → 65.02', '完整路线 2/6 → 6/6', '碰撞数 9 → 2'],
+      en: ['10 single-GPU multi-seed reproductions', 'Mean DS: 37.50 → 65.02', 'Completed routes: 2/6 → 6/6', 'Collisions: 9 → 2'],
     },
     details: {
       problem: {
-        zh: '单车传感器在遮挡场景中存在不可恢复的视野缺失；直接共享全部信息又会带来通信负担和不可靠证据。',
-        en: 'Single-vehicle sensors have irrecoverable blind spots under occlusion, while sharing everything creates communication overhead and can introduce unreliable evidence.',
+        zh: '多车协同驾驶中，语言语义的方向、单位与轨迹形状容易不一致；单车退出、图像过期和异常输出还会放大闭环风险。',
+        en: 'In cooperative driving, semantic direction, units, and trajectory shape can become inconsistent, while agent dropout, stale images, and anomalous outputs amplify closed-loop risk.',
       },
       route: {
-        zh: '从协同感知基线出发，定位通信区域选择与融合环节，探索大模型语义建议作为受约束先验的接入方式。',
-        en: 'Starting from a cooperative-perception baseline, the work targets communication-region selection and fusion, then studies how model-generated semantic guidance can enter as a constrained prior.',
+        zh: '本地部署 Qwen2.5-VL，基于 LangCoop 与 V2V-GoT 搭建双车协同链路，统一速度—曲率语义并加入轨迹与安全校验。',
+        en: 'Deploy Qwen2.5-VL locally, build a dual-vehicle pipeline on LangCoop and V2V-GoT, normalize speed–curvature semantics, and add trajectory and safety validation.',
       },
       system: {
-        zh: '多车观测 → 特征编码 → 通信信息选择 → 证据约束语义提示 → 协同融合 → 感知输出。',
-        en: 'Multi-agent observations → feature encoding → communication selection → evidence-grounded semantic guidance → cooperative fusion → perception output.',
+        zh: '双车场景观测 → 多模态语义生成 → 协同信息交换 → 轨迹合法性校验 → 控制执行 → CARLA 闭环评测。',
+        en: 'Dual-vehicle observations → multimodal semantics → cooperative exchange → trajectory validation → control execution → CARLA closed-loop evaluation.',
       },
       implementation: {
-        zh: '围绕可复现基线设计清晰插入点，并规划通信预算匹配、无信息泄漏训练与分组消融。',
-        en: 'The implementation is organized around a reproducible baseline, with explicit insertion points, matched communication budgets, leakage controls, and grouped ablations.',
+        zh: '修正速度—曲率语义、单位、目标方向与轨迹形状；实现同车历史回退、陈旧图像上限、Partial-Agent、安全停止与异常帧兜底；组织 B0、几何约束、目标恢复、速度提示及组合消融。',
+        en: 'Fixed speed–curvature semantics, units, target direction, and trajectory shape; implemented same-vehicle history fallback, stale-image limits, Partial-Agent handling, safe-stop, and anomalous-frame fallbacks; organized baseline and grouped ablations.',
       },
       result: {
-        zh: '当前处于方法设计与实验准备阶段；尚不公开未经验证的性能结论。',
-        en: 'The project is currently in method-design and experiment-preparation stages; no unverified performance claims are published.',
+        zh: '完成 10 次单 GPU 多随机种子复现。8 条路线中取得 7 组有效成对结果：平均 DS 由 37.50±21.88 提升至 65.02±5.47，RC 由 66.19 提升至 100.00，完整路线由 2/6 提升至 6/6，碰撞数由 9 降至 2；83/83 异常帧得到处理。',
+        en: 'Completed 10 single-GPU multi-seed reproductions. Seven valid paired results across eight routes improved mean DS from 37.50±21.88 to 65.02±5.47, RC from 66.19 to 100.00, completed routes from 2/6 to 6/6, and collisions from 9 to 2; all 83 anomalous frames were handled.',
       },
       challenge: {
-        zh: '大模型语义可能脱离传感器证据，同时协同收益也容易与通信开销混杂。',
-        en: 'Model semantics may drift away from sensor evidence, and cooperative gains can be confounded by communication cost.',
+        zh: '必须同时保证协同语义不串车、单车退出后仍可控，并避免大模型异常输出直接进入执行链路。',
+        en: 'The system must prevent cross-vehicle mixing, remain controllable after agent dropout, and keep anomalous model outputs from entering the control loop directly.',
       },
       solution: {
-        zh: '通过证据门控、软偏置和匹配通信预算的对照实验，限制语义建议的作用范围并验证真实贡献。',
-        en: 'Evidence gating, soft biases, and matched-budget controls bound the effect of semantic guidance and isolate its real contribution.',
+        zh: '以明确的车源标识、同车历史回退、轨迹合法性检查和强制安全停止形成分层防线，并用成对路线与消融结果核对收益。',
+        en: 'Layered safeguards combine explicit vehicle identity, same-vehicle fallback, trajectory legality checks, and forced safe-stop, with paired-route and ablation evidence used to verify gains.',
       },
       current: {
-        zh: '在研：方法设计、实验链路搭建与消融方案准备。',
-        en: 'Ongoing: method design, experiment-pipeline setup, and ablation planning.',
+        zh: '在研：继续扩展场景覆盖、复现稳定性与对照实验。',
+        en: 'Ongoing: expanding scenario coverage, reproduction stability, and controlled comparisons.',
       },
     },
   },
   {
-    id: 'diffusion-drive',
-    slug: 'language-guided-diffusion-drive',
+    id: 'zero-shot-spillage',
+    slug: 'zero-shot-road-spillage',
     featured: true,
     emphasis: 'primary',
     title: {
-      zh: '语言引导的 DiffusionDrive 轨迹规划探索',
-      en: 'Language-Guided DiffusionDrive Exploration',
+      zh: '智能网联抛洒物零样本感知与预警系统',
+      en: 'Zero-Shot Connected Road-Spillage Perception and Warning',
     },
     summary: {
-      zh: '复现生成式轨迹规划流程，探索把大模型建议作为低维语义先验，对基础轨迹进行受约束的残差修正。',
-      en: 'Reproducing a generative trajectory-planning pipeline and exploring constrained residual corrections guided by low-dimensional language priors.',
+      zh: '将开放词汇检测、道路语义分割与 C-V2X 预警连接成可运行系统，显著降低零样本抛洒物检测中的误报。',
+      en: 'Connected open-vocabulary detection, road segmentation, and C-V2X warning into a working system that substantially reduced false positives in zero-shot spillage detection.',
     },
-    category: {
-      zh: '自动驾驶轨迹规划研究',
-      en: 'Autonomous-Driving Planning Research',
-    },
-    status: { zh: '复现与方案探索', en: 'Reproduction & Exploration' },
+    category: { zh: '智能交通 · 视觉感知', en: 'Intelligent Transportation · Vision' },
+    status: { zh: '已完成', en: 'Completed' },
+    period: { zh: '2024.09 — 2025.09', en: 'Sep 2024 — Sep 2025' },
     role: {
-      zh: '负责方法复现、评测流程理解与语义先验接入方案探索',
-      en: 'Responsible for method reproduction, evaluation-pipeline analysis, and semantic-prior integration exploration',
+      zh: '负责视觉算法方案、模型训练与指标评测，并参与 OBU、RSU、MEC 协同预警系统集成',
+      en: 'Responsible for visual-algorithm design, model training, and metric evaluation, with system integration across OBU, RSU, and MEC components',
     },
-    technologies: [
-      'DiffusionDrive',
-      'NAVSIM',
-      'PyTorch',
-      'Trajectory Planning',
-    ],
+    technologies: ['PyTorch', 'YOLO-World', 'CLIP', 'TwinLiteNet', 'C-V2X', 'OBU / RSU / MEC'],
     highlights: {
-      zh: [
-        '基础轨迹生成',
-        '低维语义先验',
-        '轨迹残差修正',
-        '开环评测与闭环计划',
-      ],
-      en: [
-        'Base trajectory generation',
-        'Low-dimensional semantic priors',
-        'Trajectory residual correction',
-        'Open-loop evaluation and closed-loop plan',
-      ],
+      zh: ['Precision 4.43% → 68.45%', 'F1 0.0835 → 0.6946', 'Recall 70.50%', '省级一等奖'],
+      en: ['Precision: 4.43% → 68.45%', 'F1: 0.0835 → 0.6946', 'Recall: 70.50%', 'Provincial First Prize'],
     },
     details: {
       problem: {
-        zh: '连续轨迹生成需要保持几何与动态可行性，而语言建议是离散、高层且可能不稳定的。',
-        en: 'Continuous trajectory generation must preserve geometric and dynamic feasibility, while language suggestions are discrete, high-level, and potentially unstable.',
+        zh: '开放词汇模型能够发现未见类别，但在复杂道路背景中误报严重，且检测结果需要转化为对车辆真正有用的协同预警。',
+        en: 'Open-vocabulary models can detect unseen categories but suffer heavy road-scene false positives, and detections must be translated into useful cooperative warnings.',
       },
       route: {
-        zh: '先复现基础轨迹生成与评测，再把语言建议压缩为低维条件，限制其仅对轨迹残差产生影响。',
-        en: 'First reproduce base generation and evaluation, then compress language guidance into low-dimensional conditions whose influence is limited to trajectory residuals.',
+        zh: '以 YOLO-World 与 CLIP 提供开放词汇能力，用 TwinLiteNet 提取道路区域约束检测空间，再通过 C-V2X 传播风险信息。',
+        en: 'Use YOLO-World and CLIP for open-vocabulary capability, constrain detection with TwinLiteNet road segmentation, then propagate risk through C-V2X.',
       },
       system: {
-        zh: '场景输入 → DiffusionDrive 基础轨迹 → 语义先验 → 残差修正 → 可行性约束 → 评测。',
-        en: 'Scene input → DiffusionDrive base trajectory → semantic prior → residual correction → feasibility constraints → evaluation.',
+        zh: '道路图像 → 语义分割 → 开放词汇检测 → 道路区域过滤 → 风险生成 → OBU / RSU / MEC 协同预警。',
+        en: 'Road image → semantic segmentation → open-vocabulary detection → road-region filtering → risk generation → OBU / RSU / MEC warning.',
       },
       implementation: {
-        zh: '围绕 NAVSIM 或相关评测流程梳理数据、轨迹表示与指标接口，预留未来闭环验证边界。',
-        en: 'The implementation maps data, trajectory representations, and metric interfaces in NAVSIM or related evaluation flows while preserving a clear boundary for future closed-loop testing.',
+        zh: '完成模型组合、道路区域约束、训练评测与端到端系统联调，将识别结果接入智能网联预警链路。',
+        en: 'Implemented model composition, road-region constraints, training and evaluation, and end-to-end integration with the connected warning pipeline.',
       },
       result: {
-        zh: '目前为复现和方案探索；尚未完成完整闭环，也未确认指标提升。',
-        en: 'Currently in reproduction and design exploration; complete closed-loop validation and metric gains have not been confirmed.',
+        zh: 'Precision 从 4.43% 提升至 68.45%，F1 从 0.0835 提升至 0.6946，Recall 达 70.50%；项目获第二届甘肃省大学生交通运输科技大赛一等奖，并产出 DIONet SCI 论文。',
+        en: 'Precision improved from 4.43% to 68.45%, F1 from 0.0835 to 0.6946, with 70.50% recall. The project received a provincial first prize and contributed to the DIONet SCI paper.',
       },
       challenge: {
-        zh: '语言条件如何影响轨迹而不破坏基础规划器的稳定性。',
-        en: 'The key challenge is letting language conditions influence trajectories without destabilizing the base planner.',
+        zh: '零样本检测的高召回往往伴随大量路外误报，单纯提高阈值会损失未知障碍物发现能力。',
+        en: 'High recall in zero-shot detection often brings many off-road false positives, while simply raising thresholds sacrifices unseen-obstacle coverage.',
       },
       solution: {
-        zh: '采用低维条件、残差幅度限制与分阶段评测，将语义影响控制在可分析范围内。',
-        en: 'Low-dimensional conditioning, bounded residual magnitudes, and staged evaluation keep semantic influence analyzable.',
+        zh: '用道路语义分割建立空间先验，把“是否为障碍物”和“是否位于有效道路区域”联合判断。',
+        en: 'Road segmentation provides a spatial prior so obstacle identity and valid-road location are evaluated jointly.',
       },
-      current: {
-        zh: '复现与方案探索；计划先完成开环评测，再进入闭环验证。',
-        en: 'Reproduction and exploration; the plan is to complete open-loop evaluation before closed-loop validation.',
-      },
+      current: { zh: '已完成算法评测、系统集成与竞赛验证。', en: 'Algorithm evaluation, system integration, and competition validation completed.' },
     },
   },
   {
-    id: 'highway-risk',
-    slug: 'highway-spillage-risk-platform',
-    featured: true,
-    emphasis: 'primary',
-    title: {
-      zh: '高速公路网抛洒物源头治理与风险预估系统',
-      en: 'Highway Spillage Source Control and Risk Estimation System',
-    },
-    summary: {
-      zh: '识别货运车辆类型、篷布遮盖与环境因素，在 Web 云平台中形成路段风险画像，并结合 C-V2X 进行预警。',
-      en: 'Identifying freight-vehicle types, tarpaulin coverage, and environmental factors to profile road-segment risk on a web platform and issue C-V2X warnings.',
-    },
-    category: {
-      zh: '智能交通工程系统',
-      en: 'Intelligent-Transportation Engineering System',
-    },
-    status: { zh: '持续推进', en: 'Ongoing' },
-    period: { zh: '2023.12 — 至今', en: 'Dec 2023 — Present' },
-    role: {
-      zh: '参与数据集制作与目标检测训练；负责 Vue、Flask Web 云平台；参与小程序设计开发',
-      en: 'Contributed to dataset creation and detector training; led the Vue/Flask web platform; contributed to mini-program design and development',
-    },
-    technologies: [
-      'Deep Learning',
-      'Object Detection',
-      'Vue',
-      'Flask',
-      'C-V2X',
-    ],
-    highlights: {
-      zh: [
-        '货运车辆与篷布状态识别',
-        '路段风险画像与评估',
-        'C-V2X 高风险预警',
-        '交通运输科技大赛国家三等奖',
-      ],
-      en: [
-        'Freight-vehicle and tarpaulin-state recognition',
-        'Road-segment risk profiling',
-        'C-V2X high-risk warning',
-        'National Third Prize, Transportation Science and Technology Competition',
-      ],
-    },
-    details: {
-      problem: {
-        zh: '高速公路抛洒物风险需要从事后处置转向对货运车辆、遮盖状态与环境因素的源头识别和路段预估。',
-        en: 'Highway spillage risk calls for a shift from post-event response toward source-level identification of freight vehicles, cover states, environmental factors, and segment-level estimation.',
-      },
-      route: {
-        zh: '制作数据集并训练目标检测模型，将识别结果与环境信息汇入 Web 平台形成风险画像，再通过 C-V2X 提供预警。',
-        en: 'Build a dataset and train a detector, combine recognition outputs with environmental information in a web risk-profiling platform, then provide warnings through C-V2X.',
-      },
-      system: {
-        zh: '数据采集与标注 → 目标检测 → 风险特征汇聚 → Web 云平台 → 路段风险画像 → C-V2X 预警。',
-        en: 'Data collection and annotation → object detection → risk-feature aggregation → web platform → road-segment risk profile → C-V2X warning.',
-      },
-      implementation: {
-        zh: '参与数据集与算法训练，并负责 Vue 与 Flask 构成的云平台界面、接口和风险展示链路。',
-        en: 'Contributed to dataset and model training, and built the Vue/Flask platform interface, APIs, and risk-visualization flow.',
-      },
-      result: {
-        zh: '形成可运行的风险预估与预警系统，并获交通运输科技大赛国家三等奖。',
-        en: 'Delivered a working risk-estimation and warning system that received a National Third Prize in the Transportation Science and Technology Competition.',
-      },
-      challenge: {
-        zh: '需要把算法输出、环境因素和路段风险表达连接为可理解的工程流程。',
-        en: 'The challenge was connecting model outputs, environmental factors, and road-segment risk into an understandable engineering workflow.',
-      },
-      solution: {
-        zh: '通过分层数据结构与 Web 可视化，把识别结果转化为可追踪的风险特征与预警入口。',
-        en: 'Layered data structures and web visualization translated recognition outputs into traceable risk features and warning entry points.',
-      },
-      current: {
-        zh: '2023.12 至今，持续推进。',
-        en: 'Ongoing since December 2023.',
-      },
-    },
-  },
-  {
-    id: 'apollo',
-    slug: 'apollo-planning-strategy',
+    id: 'dionet',
+    slug: 'dionet-low-light-detection',
     featured: true,
     emphasis: 'secondary',
-    title: {
-      zh: 'Apollo 自动驾驶规划策略优化',
-      en: 'Apollo Planning-Strategy Optimization',
-    },
+    title: { zh: 'DIONet 低照度道路障碍物实时检测', en: 'DIONet for Real-Time Low-Light Road-Obstacle Detection' },
     summary: {
-      zh: '围绕交通灯、红灯停车与右转、多车道变道等具体任务，定位并修改 Apollo 9.0 规划规则与场景状态机。',
-      en: 'Locating and modifying Apollo 9.0 planning rules and scenario state machines for traffic lights, red-light stopping and turning, and multi-lane maneuvers.',
+      zh: '面向夜间与低照度道路场景设计多尺度特征融合网络，并在 SAS 数据集和 PIXKIT2.0 车辆平台上完成评测与部署实践。',
+      en: 'Designed a multi-scale feature-fusion network for night and low-light road scenes, with evaluation on SAS and deployment practice on a PIXKIT2.0 vehicle.',
     },
-    category: {
-      zh: '自动驾驶竞赛与规划系统实践',
-      en: 'Autonomous-Driving Competition & Planning Practice',
-    },
-    status: { zh: '仿真实践', en: 'Simulation Practice' },
+    category: { zh: '视觉算法 · 车载部署', en: 'Vision Algorithm · Vehicle Deployment' },
+    status: { zh: '论文已发表', en: 'Paper Published' },
+    period: { zh: '2024.09 — 2025.09', en: 'Sep 2024 — Sep 2025' },
     role: {
-      zh: '负责场景分析、规划规则定位、代码修改与仿真验证',
-      en: 'Responsible for scenario analysis, planning-rule localization, code changes, and simulation validation',
+      zh: '参与网络设计、消融实验、数据集评测与车辆端部署验证',
+      en: 'Contributed to network design, ablations, dataset evaluation, and vehicle-side deployment validation',
     },
-    technologies: ['Apollo 9.0', 'C++', 'Planning', 'Simulation'],
+    technologies: ['PyTorch', 'YOLO', 'Transformer', 'AIFI', 'Inner-IoU', 'PIXKIT2.0'],
     highlights: {
-      zh: [
-        '交通灯场景状态机',
-        '红灯停车距离与右转逻辑',
-        '多车道变道与右转任务',
-      ],
-      en: [
-        'Traffic-light scenario state machines',
-        'Red-light stop distance and right-turn logic',
-        'Multi-lane lane-change and turn tasks',
-      ],
+      zh: ['mAP@50 93.5%', 'mAP@50:95 65.9%', 'IEEE Sensors Journal 2025', '车辆端部署实践'],
+      en: ['mAP@50: 93.5%', 'mAP@50:95: 65.9%', 'IEEE Sensors Journal 2025', 'Vehicle-side deployment'],
     },
     details: {
-      problem: {
-        zh: '竞赛仿真中的具体交通场景需要理解大型规划系统的规则、状态和任务切换逻辑。',
-        en: 'Specific competition-simulation scenarios required understanding rules, states, and task transitions in a large planning system.',
-      },
-      route: {
-        zh: '从场景复现和规划输出入手，沿配置、规则与状态机定位行为来源，再做小范围修改。',
-        en: 'Starting from scenario reproduction and planner outputs, trace behavior through configuration, rules, and state machines, then apply scoped changes.',
-      },
-      system: {
-        zh: '仿真场景 → 感知与地图状态 → 场景状态机 → 交通规则 → 轨迹规划 → 仿真验证。',
-        en: 'Simulation scene → perception/map state → scenario state machine → traffic rules → trajectory planning → simulation validation.',
-      },
-      implementation: {
-        zh: '围绕 Apollo 9.0 规划模块阅读代码，修改红灯停车距离、红灯右转及多车道任务相关策略。',
-        en: 'Read and modified Apollo 9.0 planning code around red-light stopping distance, right-turn behavior, and multi-lane tasks.',
-      },
-      result: {
-        zh: '在仿真环境中完成面向竞赛场景的规则修改与验证；不等同于真实道路量产能力。',
-        en: 'Completed rule changes and validation for competition scenarios in simulation; this does not imply production-road capability.',
-      },
-      challenge: {
-        zh: '规划行为由配置、规则与状态机共同决定，单点修改容易产生连锁影响。',
-        en: 'Planner behavior emerges from configuration, rules, and state machines, so isolated edits can have cascading effects.',
-      },
-      solution: {
-        zh: '通过场景级复现、调用链跟踪和逐项回归，缩小修改边界并验证行为变化。',
-        en: 'Scenario-level reproduction, control-flow tracing, and incremental regression checks kept changes scoped and observable.',
-      },
-      current: {
-        zh: '已完成相关竞赛仿真场景实践。',
-        en: 'Relevant competition-simulation practice completed.',
-      },
+      problem: { zh: '低照度条件会同时削弱目标纹理、边缘和尺度特征，使道路障碍物检测更容易漏检。', en: 'Low illumination weakens texture, edges, and multi-scale cues, increasing missed detections for road obstacles.' },
+      route: { zh: '围绕多尺度 Transformer、频率自适应空洞卷积、AIFI 与 Inner-IoU 改进特征融合和定位能力。', en: 'Improve feature fusion and localization through a multi-scale Transformer, frequency-adaptive dilated convolution, AIFI, and Inner-IoU.' },
+      system: { zh: '低照度图像 → 多尺度特征提取 → 自适应融合 → 障碍物检测 → SAS 评测 → PIXKIT2.0 部署验证。', en: 'Low-light image → multi-scale features → adaptive fusion → obstacle detection → SAS evaluation → PIXKIT2.0 deployment validation.' },
+      implementation: { zh: '完成网络模块组合、训练与消融设计，并将检测链路迁移到车辆计算平台进行实时场景验证。', en: 'Integrated network modules, training, and ablations, then moved the detection pipeline to a vehicle compute platform for real-scene validation.' },
+      result: { zh: '在 SAS 数据集上达到 mAP@50 93.5%、mAP@50:95 65.9%；论文发表于 IEEE Sensors Journal（2025）。', en: 'Achieved 93.5% mAP@50 and 65.9% mAP@50:95 on SAS; published in IEEE Sensors Journal (2025).' },
+      challenge: { zh: '提升弱光目标特征的同时，需要控制模型复杂度并保持实时检测能力。', en: 'The model must strengthen weak-light features while controlling complexity and preserving real-time detection.' },
+      solution: { zh: '以多尺度融合和选择性模块增强有效特征，并通过消融与车辆端验证检查精度—效率平衡。', en: 'Multi-scale fusion and selective modules strengthen useful cues, while ablations and vehicle-side validation check the accuracy–efficiency trade-off.' },
+      current: { zh: '研究与论文已完成，保留车辆端部署与算法复现经验。', en: 'Research and publication completed, with reusable experience in deployment and reproduction.' },
     },
   },
   {
-    id: 'ros2-grasp',
-    slug: 'ros2-mobile-manipulation',
+    id: 'ros-logistics',
+    slug: 'ros-mobile-manipulator-logistics',
     featured: true,
     emphasis: 'secondary',
-    title: {
-      zh: 'ROS 2 移动机器人与机械臂视觉抓取',
-      en: 'ROS 2 Mobile Manipulation and Visual Grasping',
-    },
+    title: { zh: 'ROS 移动机械臂智能物流系统', en: 'ROS Mobile-Manipulator Intelligent Logistics System' },
     summary: {
-      zh: '打通移动底盘、ArUco 识别、TF 变换、MoveIt 2 规划、末端运动与夹爪控制的完整链路。',
-      en: 'Integrating a mobile base, ArUco perception, TF transforms, MoveIt 2 planning, end-effector motion, and gripper control.',
+      zh: '在 Jetson Nano 与 ROS Noetic 上完成移动底盘、ArUco 定位、PyMyCobot 抓取和串口控制的全流程闭环。',
+      en: 'Integrated a mobile base, ArUco localization, PyMyCobot grasping, and serial control into an end-to-end loop on Jetson Nano and ROS Noetic.',
     },
-    category: {
-      zh: '机器人系统工程实践',
-      en: 'Robotic-System Engineering Practice',
-    },
-    status: { zh: '系统联调', en: 'System Integration' },
+    category: { zh: '机器人系统工程', en: 'Robotics Systems Engineering' },
+    status: { zh: '进行中', en: 'Ongoing' },
+    period: { zh: '2026.06 — 2026.09', en: 'Jun 2026 — Sep 2026' },
     role: {
-      zh: '负责定位问题、运动链路实现、机器人系统调试与软硬件联调',
-      en: 'Responsible for fault localization, motion-pipeline implementation, robot debugging, and hardware–software integration',
+      zh: '负责 ROS 节点与 Launch 链路、视觉定位、机械臂动作规划、串口联调和闭环测试',
+      en: 'Responsible for ROS nodes and launch flows, visual localization, manipulator motion planning, serial integration, and closed-loop testing',
     },
-    technologies: [
-      'ROS 2 Humble',
-      'MoveIt 2',
-      'ArUco',
-      'TF',
-      'Python',
-      'Robotics',
-    ],
+    technologies: ['Jetson Nano', 'ROS Noetic', 'PyMyCobot', 'ArUco', 'LiDAR', 'Serial'],
     highlights: {
-      zh: [
-        '视觉识别与 TF 坐标变换',
-        '机械臂规划与末端控制',
-        '导航、识别与抓取联动',
-      ],
-      en: [
-        'Visual recognition and TF transforms',
-        'Manipulator planning and end-effector control',
-        'Navigation–perception–grasp coordination',
-      ],
+      zh: ['20 次全流程闭环测试', '任务完成率 85%', '抓取成功率 90%', '目标定位误差 ≤ 5 cm'],
+      en: ['20 end-to-end closed-loop tests', '85% task completion', '90% grasp success', 'Target localization error ≤ 5 cm'],
     },
     details: {
-      problem: {
-        zh: '移动机器人需要在导航后稳定识别目标，并把视觉坐标可靠传递到机械臂规划与夹爪执行。',
-        en: 'A mobile robot must reliably recognize a target after navigation and carry visual coordinates through manipulator planning to gripper execution.',
-      },
-      route: {
-        zh: '分段验证视觉、TF、规划、末端运动和夹爪控制，再把各环节接入统一任务流程。',
-        en: 'Validate perception, TF, planning, end-effector motion, and gripper control separately before connecting them into one task flow.',
-      },
-      system: {
-        zh: '视觉识别 → 坐标变换 → 机械臂规划 → 末端运动 → 夹爪闭合 → 抓取验证。',
-        en: 'Visual recognition → coordinate transform → manipulator planning → end-effector motion → gripper close → grasp validation.',
-      },
-      implementation: {
-        zh: '使用 ROS 2 Humble、MoveIt 2、ArUco 与 TF，完成移动底盘和机械臂的任务联动。',
-        en: 'Used ROS 2 Humble, MoveIt 2, ArUco, and TF to coordinate the mobile base and manipulator.',
-      },
-      result: {
-        zh: '形成从导航、识别到抓取验证的完整系统链路。',
-        en: 'Established an end-to-end system flow from navigation and recognition to grasp validation.',
-      },
-      challenge: {
-        zh: '坐标系、时序、机械臂可达性与真实硬件误差会共同影响抓取结果。',
-        en: 'Coordinate frames, timing, manipulator reachability, and physical hardware error jointly affect grasp outcomes.',
-      },
-      solution: {
-        zh: '通过 TF 链路核对、分阶段预检、可达位姿筛选与软硬件联合调试逐项消除问题。',
-        en: 'TF-chain checks, staged preflight validation, reachable-pose screening, and joint hardware–software debugging isolated each issue.',
-      },
-      current: {
-        zh: '已完成机器人系统工程实践与链路验证。',
-        en: 'Robotic-system engineering practice and pipeline validation completed.',
-      },
+      problem: { zh: '移动、定位、识别、抓取和通信需要跨多个 ROS 节点与硬件统一协作，任何一环漂移都会导致任务失败。', en: 'Mobility, localization, recognition, grasping, and communication span multiple ROS nodes and devices; drift in any stage can fail the task.' },
+      route: { zh: '以任务状态机组织导航与抓取，使用 ArUco 完成目标定位，并通过串口与机械臂控制接口执行动作。', en: 'Coordinate navigation and grasping with a task state machine, localize targets through ArUco, and execute motions through serial and manipulator control interfaces.' },
+      system: { zh: '激光导航 → ArUco 识别 → 目标坐标转换 → 机械臂规划 → 抓取与搬运 → 状态回传。', en: 'LiDAR navigation → ArUco recognition → target transform → manipulator planning → grasp and transport → state feedback.' },
+      implementation: { zh: '配置 ROS Noetic 节点、Topic、Service 与 Launch；联调 Jetson Nano、PyMyCobot、激光雷达和串口设备；组织 20 次端到端测试。', en: 'Configured ROS Noetic nodes, topics, services, and launch files; integrated Jetson Nano, PyMyCobot, LiDAR, and serial devices; ran 20 end-to-end tests.' },
+      result: { zh: '20 次测试中任务完成率 85%、标记识别率 95%、抓取成功率 90%、目标定位误差不超过 5 cm，平均任务时长约 120 秒。', en: 'Across 20 tests: 85% task completion, 95% marker recognition, 90% grasp success, target localization error within 5 cm, and about 120 seconds average task time.' },
+      challenge: { zh: '坐标变换、机械臂可达性、串口状态与移动底盘到位条件相互耦合。', en: 'Coordinate transforms, manipulator reachability, serial state, and mobile-base arrival conditions are tightly coupled.' },
+      solution: { zh: '通过分阶段预检、状态机兜底、坐标链核对和重复闭环测试定位并隔离问题。', en: 'Staged preflight checks, state-machine fallbacks, transform-chain validation, and repeated closed-loop tests isolate failures.' },
+      current: { zh: '进行中：已形成量化闭环测试结果，继续优化系统稳定性。', en: 'Ongoing: quantified closed-loop results are available, with further stability work in progress.' },
     },
   },
   {
-    id: 'embedded',
-    slug: 'embedded-sensor-systems',
+    id: 'der-nr',
+    slug: 'der-nr-driver-emotion',
     featured: false,
     emphasis: 'secondary',
-    title: {
-      zh: '嵌入式与传感器系统实践',
-      en: 'Embedded and Sensor-System Practice',
-    },
-    summary: {
-      zh: '围绕 STM32、MPU6050、I²C、CAN 与平衡车控制，完成寄存器通信、信号分析和底层控制实践。',
-      en: 'Hands-on work with STM32, MPU6050, I²C, CAN, balance control, register communication, and signal analysis.',
-    },
-    category: { zh: '更多工程实践', en: 'Additional Engineering Work' },
-    status: { zh: '工程实践', en: 'Engineering Practice' },
-    role: {
-      zh: '参与底层通信、传感器调试、示波器分析与控制代码理解',
-      en: 'Worked on low-level communication, sensor debugging, oscilloscope analysis, and control-code analysis',
-    },
-    technologies: ['STM32', 'MPU6050', 'I²C', 'CAN', 'Embedded C'],
-    highlights: {
-      zh: ['传感器寄存器与 I²C', '示波器信号分析', '平衡车控制与 CAN'],
-      en: [
-        'Sensor registers and I²C',
-        'Oscilloscope signal analysis',
-        'Balance control and CAN',
-      ],
-    },
+    title: { zh: 'DER-NR 真实场景驾驶员情绪鲁棒识别', en: 'DER-NR for Robust Real-World Driver Emotion Recognition' },
+    summary: { zh: '面向噪声标注和复杂车内环境，构建结合 EMA 注意力、CoTAttention 与 DFNS 的抗噪情绪识别网络。', en: 'Built a noise-robust emotion-recognition network combining EMA attention, CoTAttention, and DFNS for noisy labels and complex in-cabin conditions.' },
+    category: { zh: '驾驶员状态感知', en: 'Driver-State Perception' },
+    status: { zh: '论文已发表', en: 'Paper Published' },
+    period: { zh: '2025.03 — 2026.01', en: 'Mar 2025 — Jan 2026' },
+    role: { zh: '参与网络模块设计、噪声鲁棒训练、跨数据集实验与论文工作', en: 'Contributed to module design, noise-robust training, cross-dataset experiments, and publication work' },
+    technologies: ['PyTorch', 'EMA Attention', 'CoTAttention', 'DFNS', 'AffectNet', 'RAF-DB'],
+    highlights: { zh: ['四个公开数据集', '较基线提升 1.20—9.84 个百分点', 'IEEE TCSS 2026'], en: ['Four public datasets', '1.20–9.84 pp over baselines', 'IEEE TCSS 2026'] },
     details: {
-      problem: {
-        zh: '传感器、总线和控制环之间的问题需要从电气信号、寄存器配置与中断执行路径共同定位。',
-        en: 'Issues across sensors, buses, and control loops must be localized through electrical signals, register configuration, and interrupt execution paths.',
-      },
-      route: {
-        zh: '从硬件信号和通信时序入手，核对寄存器读写，再追踪控制与执行链路。',
-        en: 'Start with physical signals and bus timing, verify register access, then trace the control and actuation path.',
-      },
-      system: {
-        zh: '传感器 → I²C / CAN → MCU 中断与控制 → PWM / 执行器 → 状态反馈。',
-        en: 'Sensor → I²C / CAN → MCU interrupt and control → PWM / actuator → state feedback.',
-      },
-      implementation: {
-        zh: '涉及 STM32、MPU6050、I²C、CAN、示波器分析和平衡车控制代码。',
-        en: 'Covered STM32, MPU6050, I²C, CAN, oscilloscope analysis, and balance-control code.',
-      },
-      result: {
-        zh: '完成相关嵌入式与传感器系统实践。',
-        en: 'Completed the associated embedded and sensor-system exercises.',
-      },
-      challenge: {
-        zh: '同一故障可能来自硬件连接、时序、寄存器或控制逻辑。',
-        en: 'The same symptom may originate in wiring, timing, registers, or control logic.',
-      },
-      solution: {
-        zh: '按物理层、通信层和控制层分层检查，并用示波器与代码调用链相互验证。',
-        en: 'Layered checks across physical, communication, and control layers, cross-validating oscilloscope evidence with code paths.',
-      },
-      current: {
-        zh: '作为辅助工程能力展示。',
-        en: 'Presented as supporting engineering experience.',
-      },
+      problem: { zh: '真实驾驶员情绪数据存在遮挡、光照变化与噪声标签，常规模型容易记忆错误监督。', en: 'Real driver-emotion data includes occlusion, illumination shifts, and noisy labels that standard models can memorize.' },
+      route: { zh: '融合 EMA 注意力、CoTAttention 与 DFNS，增强有效表情特征并抑制噪声样本影响。', en: 'Combine EMA attention, CoTAttention, and DFNS to strengthen useful expression cues and suppress noisy-sample influence.' },
+      system: { zh: '驾驶员图像 → 多尺度注意力特征 → 噪声样本抑制 → 情绪分类 → 多数据集评测。', en: 'Driver image → multi-scale attentive features → noisy-sample suppression → emotion classification → multi-dataset evaluation.' },
+      implementation: { zh: '在 RAF-DB、DEFE、KMU-FED 与 AffectNet 上开展统一训练、对照和跨数据集分析。', en: 'Conducted unified training, controls, and cross-dataset analysis on RAF-DB, DEFE, KMU-FED, and AffectNet.' },
+      result: { zh: '在四个公开数据集上较基线提升 1.20—9.84 个百分点；论文发表于 IEEE Transactions on Computational Social Systems（2026）。', en: 'Improved over baselines by 1.20–9.84 percentage points across four public datasets; published in IEEE Transactions on Computational Social Systems (2026).' },
+      challenge: { zh: '模型需要区分真实难样本和错误标签，避免在清洗噪声时损失少数类信息。', en: 'The model must distinguish genuinely hard samples from wrong labels without discarding minority-class information.' },
+      solution: { zh: '通过注意力增强与动态噪声筛选协同建模，并用多数据集实验检查稳健性。', en: 'Attention enhancement and dynamic noise filtering are modeled jointly, with robustness checked across multiple datasets.' },
+      current: { zh: '研究与论文已完成。', en: 'Research and publication completed.' },
     },
   },
 ];
 
 export const featuredProjects = projects.filter((project) => project.featured);
-export const additionalProjects = projects.filter(
-  (project) => !project.featured,
-);
+export const additionalProjects = projects.filter((project) => !project.featured);
 export function getProject(slug: string) {
   return projects.find((project) => project.slug === slug);
 }

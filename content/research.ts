@@ -2,77 +2,62 @@ import type { ResearchArea } from './types';
 
 export const researchAreas: ResearchArea[] = [
   {
-    id: 'cooperative-perception',
+    id: 'perception',
     index: '01',
     status: 'active',
-    title: {
-      zh: '视距受限场景下的协同感知',
-      en: 'Cooperative Perception under Limited Visibility',
-    },
+    title: { zh: '自动驾驶视觉感知', en: 'Autonomous-Driving Perception' },
     summary: {
-      zh: '研究遮挡导致的感知缺失，以及多车视角互补、通信信息选择与共享信息可靠性。',
-      en: 'Studying perception gaps caused by occlusion, complementary multi-vehicle viewpoints, selective communication, and the reliability of shared evidence.',
+      zh: '面向道路障碍物、低照度与开放词汇场景，完成模型设计、训练、消融、指标评测和车辆端部署实践。',
+      en: 'Model design, training, ablation, metric evaluation, and vehicle-side deployment for road obstacles, low light, and open-vocabulary perception.',
     },
     topics: [
-      { zh: '遮挡与感知缺失', en: 'Occlusion & Missing Evidence' },
-      { zh: '多车视角互补', en: 'Multi-Agent View Complementarity' },
-      { zh: '通信成本与性能平衡', en: 'Communication–Performance Trade-off' },
+      { zh: '目标检测', en: 'Object Detection' },
+      { zh: '低照度感知', en: 'Low-Light Perception' },
+      { zh: '开放词汇检测', en: 'Open-Vocabulary Detection' },
     ],
   },
   {
-    id: 'multimodal-reasoning',
+    id: 'cooperative-intelligence',
     index: '02',
     status: 'active',
-    title: {
-      zh: '多模态大模型与驾驶语义推理',
-      en: 'Multimodal Foundation Models for Driving Reasoning',
-    },
+    title: { zh: '协同感知与多模态系统', en: 'Cooperative Perception & Multimodal Systems' },
     summary: {
-      zh: '探索由视觉与传感器证据约束的语义建议，避免大模型推理脱离可观测信息。',
-      en: 'Exploring semantic guidance constrained by visual and sensor evidence so that model reasoning remains grounded in observable information.',
+      zh: '围绕 C-V2X、多车视角互补和本地 VLM 部署，设计可靠的信息交换、异常处理和语义约束机制。',
+      en: 'Reliable information exchange, anomalous-output handling, and semantic constraints across C-V2X, complementary vehicle views, and local VLM deployment.',
     },
     topics: [
-      { zh: '多模态场景理解', en: 'Multimodal Scene Understanding' },
-      { zh: '证据约束推理', en: 'Evidence-Grounded Reasoning' },
-      { zh: '语义残差与软偏置', en: 'Semantic Residuals & Soft Biases' },
+      { zh: 'V2V / V2I', en: 'V2V / V2I' },
+      { zh: 'Qwen2.5-VL', en: 'Qwen2.5-VL' },
+      { zh: '安全回退', en: 'Safety Fallbacks' },
     ],
   },
   {
-    id: 'trajectory-planning',
+    id: 'simulation-evaluation',
     index: '03',
-    status: 'exploring',
-    title: {
-      zh: '语言引导与生成式轨迹规划',
-      en: 'Language-Guided Generative Trajectory Planning',
-    },
+    status: 'active',
+    title: { zh: '自动驾驶仿真与闭环评测', en: 'Autonomous-Driving Simulation & Evaluation' },
     summary: {
-      zh: '探索将低维语言语义先验连接到连续轨迹，并在基础轨迹上进行受约束的残差修正。',
-      en: 'Exploring how low-dimensional language priors can connect to continuous trajectories through constrained residual corrections.',
+      zh: '使用 CARLA 组织多路线、成对对照、多随机种子复现和异常场景验证，用闭环结果检查算法实际收益。',
+      en: 'Use CARLA for multi-route paired comparisons, multi-seed reproduction, and anomalous-scenario validation, checking algorithmic value through closed-loop outcomes.',
     },
     topics: [
-      { zh: 'DiffusionDrive', en: 'DiffusionDrive' },
-      { zh: '低维语义先验', en: 'Low-Dimensional Semantic Priors' },
-      {
-        zh: '开环评测与闭环计划',
-        en: 'Open-loop Evaluation & Closed-loop Plan',
-      },
+      { zh: 'CARLA 闭环', en: 'CARLA Closed Loop' },
+      { zh: '多随机种子复现', en: 'Multi-Seed Reproduction' },
+      { zh: '安全与异常验证', en: 'Safety & Fault Validation' },
     ],
   },
   {
-    id: 'system-validation',
+    id: 'robotics',
     index: '04',
     status: 'active',
-    title: {
-      zh: '自动驾驶与机器人系统验证',
-      en: 'Autonomous System Implementation and Validation',
-    },
+    title: { zh: 'ROS 机器人系统工程', en: 'ROS Robotics Systems Engineering' },
     summary: {
-      zh: '通过 Apollo、CARLA、ROS 2、MoveIt 2 与真实硬件，把算法问题落实到可运行系统。',
-      en: 'Using Apollo, CARLA, ROS 2, MoveIt 2, and physical hardware to carry algorithmic ideas into working systems.',
+      zh: '在 Jetson Nano 与 ROS 上连接导航、视觉定位、机械臂控制和串口通信，以重复闭环测试验证软硬件系统。',
+      en: 'Integrate navigation, visual localization, manipulation, and serial communication on Jetson Nano and ROS, validating hardware–software systems through repeated closed-loop tests.',
     },
     topics: [
-      { zh: '规划系统修改', en: 'Planning-System Modification' },
-      { zh: '仿真验证', en: 'Simulation Validation' },
+      { zh: 'ROS Noetic', en: 'ROS Noetic' },
+      { zh: 'ArUco 与坐标链', en: 'ArUco & Transform Chains' },
       { zh: '软硬件联调', en: 'Hardware–Software Integration' },
     ],
   },
@@ -80,37 +65,28 @@ export const researchAreas: ResearchArea[] = [
 
 export const researchPipeline = [
   {
-    key: 'scene',
-    title: { zh: '复杂交通场景', en: 'Complex Traffic' },
-    detail: { zh: '遮挡与信息不完整', en: 'Occlusion and incomplete evidence' },
+    key: 'problem',
+    title: { zh: '问题与指标', en: 'Problem & Metrics' },
+    detail: { zh: '定义场景、边界与评测标准', en: 'Define scenarios, boundaries, and metrics' },
   },
   {
-    key: 'cooperate',
-    title: { zh: '协同感知', en: 'Cooperative Perception' },
-    detail: { zh: '车车 / 车路视角互补', en: 'V2V / V2X view complementarity' },
+    key: 'reproduce',
+    title: { zh: '复现与基线', en: 'Reproduce & Baseline' },
+    detail: { zh: '跑通真实代码与实验链路', en: 'Run real code and experiment pipelines' },
   },
   {
-    key: 'reason',
-    title: { zh: '语义推理', en: 'Semantic Reasoning' },
-    detail: {
-      zh: '多模态理解与证据约束',
-      en: 'Multimodal and evidence-grounded',
-    },
+    key: 'build',
+    title: { zh: '算法与系统', en: 'Build Algorithms' },
+    detail: { zh: '实现模型、协议与安全机制', en: 'Implement models, protocols, and safeguards' },
   },
   {
-    key: 'plan',
-    title: { zh: '轨迹规划', en: 'Trajectory Planning' },
-    detail: {
-      zh: '生成、决策与残差修正',
-      en: 'Generation, decision, and correction',
-    },
+    key: 'evaluate',
+    title: { zh: '量化评测', en: 'Quantify' },
+    detail: { zh: '对照、消融与多次复现', en: 'Controls, ablations, and repeated runs' },
   },
   {
     key: 'validate',
-    title: { zh: '系统验证', en: 'System Validation' },
-    detail: {
-      zh: '数据集、仿真与真实硬件',
-      en: 'Datasets, simulation, and hardware',
-    },
+    title: { zh: '闭环验证', en: 'Validate in Loop' },
+    detail: { zh: '仿真或真实硬件验证', en: 'Simulation or physical hardware' },
   },
 ] as const;

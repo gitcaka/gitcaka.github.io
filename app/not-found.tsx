@@ -12,8 +12,8 @@ export default function NotFound() {
       </h1>
       <p>
         {language === 'zh'
-          ? '返回主页，继续查看研究与项目。'
-          : 'Return home to continue exploring the research and projects.'}
+          ? '返回主页，继续查看个人经历与项目。'
+          : 'Return home to continue exploring my experience and projects.'}
       </p>
       <Link href="/">
         <ArrowLeft />
