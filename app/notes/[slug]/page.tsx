@@ -1,5 +1,9 @@
 import { notFound } from 'next/navigation';
-import { notes } from '@/content/notes';
+import { notes, publishedNotes } from '@/content/notes';
+
+export function generateStaticParams() {
+  return publishedNotes.map((note) => ({ slug: note.slug }));
+}
 export default async function Page({
   params,
 }: {

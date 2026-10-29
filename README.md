@@ -44,6 +44,18 @@ npm run build
 - 内部导航使用 `FullPageLink` 原生链接，以兼容当前 Vinext 托管环境。
 - GitHub Pages 作品明确标为静态演示，后台检测能力以各仓库说明及本地运行结果为准。
 
-## 发布
+## GitHub Pages
+
+公开主页：https://gitcaka.github.io/ 。源码仓库：https://github.com/gitcaka/gitcaka.github.io 。
+
+```sh
+npm run build:pages
+```
+
+该命令以静态模式构建，校验页面和资源，并生成 `dist/client/`。GitHub Actions 在 `main` 分支更新后自动完成类型检查、构建及 Pages 部署，也可从 Actions 手动运行。只发布 `dist/client/`，不需要后台服务、数据库或额外部署密钥。
+
+当前 Vinext beta 的尾斜杠预渲染会触发重定向，因此构建脚本在导出后补充目录索引，使 `/resume/` 和项目详情支持直接访问、刷新；同时生成 sitemap、robots 和 `.nojekyll`。`NEXT_PUBLIC_SITE_URL` 可覆盖站点地址。GitHub Pages 使用根域名仓库，不需要为静态资源添加项目路径前缀。
+
+## 原 Sites 部署
 
 保留 `.openai/hosting.json` 中的现有 Sites 项目归属。发布使用 Sites 插件提供的临时源代码仓库凭据、构建打包及部署流程；不要将凭据写入文件。2026-10-29 调用原项目时返回 `NOT_FOUND`，需要恢复该站点的托管访问后再更新原公开地址。
