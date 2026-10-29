@@ -30,14 +30,14 @@ export const experience: ExperienceItem[] = [
   {
     id: 'robotics-project',
     period: { zh: '2026.06 — 2026.09', en: 'Jun 2026 — Sep 2026' },
-    type: { zh: '机器人系统项目 · 进行中', en: 'Robotics Project · Ongoing' },
+    type: { zh: '机器人系统项目', en: 'Robotics Project' },
     title: {
       zh: 'ROS 移动机械臂智能物流系统',
       en: 'ROS Mobile-Manipulator Intelligent Logistics System',
     },
     summary: {
-      zh: '在 Jetson Nano 与 ROS Noetic 上打通导航、ArUco 识别、机械臂抓取与串口控制；20 次全流程闭环测试任务完成率 85%，抓取成功率 90%。',
-      en: 'Integrated navigation, ArUco recognition, manipulation, and serial control on Jetson Nano with ROS Noetic; across 20 end-to-end closed-loop tests, task completion reached 85% and grasp success 90%.',
+      zh: '在 Jetson Nano 与 ROS Noetic 上打通导航、ArUco 识别、双空间规划与异常处理；完成 20 组闭环测试、9 组实机标定（拟合 RMSE 0.63 mm）和 4/4 边界测试。',
+      en: 'Integrated navigation, ArUco recognition, dual-space planning, and fault handling on Jetson Nano with ROS Noetic; completed 20 closed-loop test groups, 9 calibration observations (0.63 mm fitting RMSE), and all 4 boundary tests.',
     },
   },
   {

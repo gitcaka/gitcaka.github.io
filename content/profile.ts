@@ -25,5 +25,5 @@ export const profile: Profile = {
     { zh: '机器人系统工程', en: 'Robotics Systems Engineering' },
   ],
   avatar: undefined,
-  resume: undefined,
+  resume: '/resume',
 };

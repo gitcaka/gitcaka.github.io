@@ -5,7 +5,6 @@ import { Languages, Menu, MonitorCog, Moon, Sun } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetDescription,
   SheetHeader,
@@ -21,9 +20,8 @@ export function SiteHeader() {
   const { language, toggleLanguage, theme, cycleTheme, t } = useSite();
   const links = [
     ['/', t.nav.home],
-    ['/research', t.nav.research],
     ['/projects', t.nav.projects],
-    ['/experience', t.nav.experience],
+    ['/resume', language === 'zh' ? '简历' : 'Résumé'],
     ['/outputs', t.nav.outputs],
     ['/about', t.nav.about],
     ['/contact', t.nav.contact],
@@ -118,20 +116,15 @@ export function SiteHeader() {
                 }
               >
                 {links.map(([href, label], index) => (
-                  <SheetClose
-                    nativeButton={false}
+                  <FullPageLink
                     key={href}
-                    render={
-                      <FullPageLink
-                        href={href}
-                        aria-current={active(href) ? 'page' : undefined}
-                        aria-label={label}
-                      />
-                    }
+                    href={href}
+                    aria-current={active(href) ? 'page' : undefined}
+                    aria-label={label}
                   >
                     <span>{String(index + 1).padStart(2, '0')}</span>
                     {label}
-                  </SheetClose>
+                  </FullPageLink>
                 ))}
               </nav>
             </SheetContent>

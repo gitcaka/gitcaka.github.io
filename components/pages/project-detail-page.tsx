@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowLeft, ExternalLink, Image as ImageIcon } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Check } from 'lucide-react';
 import type { Project } from '@/content/types';
 import { localize } from '@/lib/content';
 import { useSite } from '@/components/site-context';
@@ -49,11 +49,16 @@ export function ProjectDetailPage({ project }: { project: Project }) {
               ))}
             </div>
           </div>
-          <div className="detail-media-placeholder">
-            <div className="cover-grid" />
-            <div className="cover-route" />
-            <ImageIcon />
-            <span>{t.common.imagePending}</span>
+          <div className="project-evidence-detail">
+            <small>
+              {language === 'zh' ? '项目亮点' : 'PROJECT HIGHLIGHTS'}
+            </small>
+            {project.highlights[language].map((item) => (
+              <p key={item}>
+                <Check size={17} />
+                {item}
+              </p>
+            ))}
           </div>
         </section>
         <section className="detail-role">

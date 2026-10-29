@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowUpRight, Image as ImageIcon } from 'lucide-react';
+import { ArrowUpRight, Cpu } from 'lucide-react';
 import type { Project } from '@/content/types';
 import { localize } from '@/lib/content';
 import { useSite } from './site-context';
@@ -16,20 +16,15 @@ export function ProjectCard({
   const { language, t } = useSite();
   return (
     <article className={`project-card ${large ? 'project-card-large' : ''}`}>
-      <div className="project-cover" aria-label={t.common.imagePending}>
-        <div className="cover-grid" />
-        <div className="cover-route" />
-        <span className="cover-node node-a" />
-        <span className="cover-node node-b" />
-        <span className="cover-car car-a" />
-        <span className="cover-car car-b" />
-        <div className="cover-empty">
-          <ImageIcon />
-          <span>{t.common.imagePending}</span>
+      <div className="project-evidence-cover">
+        <div>
+          <Cpu size={22} />
+          <span>
+            {project.technologies[0]} / {project.technologies[1]}
+          </span>
         </div>
-        <span className="project-index">
-          {String((Number(project.id.length * 7) % 90) + 10).padStart(2, '0')}
-        </span>
+        <strong>{project.highlights[language][0]}</strong>
+        <small>{project.highlights[language][1]}</small>
       </div>
       <div className="project-card-body">
         <div className="project-meta">

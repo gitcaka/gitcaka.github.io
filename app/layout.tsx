@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import './portfolio.css';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 import { SiteProviders } from '@/components/site-context';
@@ -7,7 +8,7 @@ import { SiteProviders } from '@/components/site-context';
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ??
   'https://wukang-cao-research.caka152005.chatgpt.site';
-const siteTitle = '曹武康｜自动驾驶感知与智能系统个人主页';
+const siteTitle = '曹武康 Wukang Cao｜3D 个人主页与作品集';
 const siteDescription =
   '曹武康的中英文个人主页：交通运输硕士生，求职方向为自动驾驶感知、仿真评测、多模态/VLM 与机器人系统工程。';
 

@@ -51,10 +51,6 @@ export function SiteProviders({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     document.documentElement.lang = language === 'zh' ? 'zh-CN' : 'en';
-    document.title =
-      language === 'zh'
-        ? '曹武康｜智能网联、协同感知与自动驾驶研究'
-        : 'Wukang Cao | Cooperative Intelligence and Autonomous Driving';
   }, [language]);
 
   useEffect(() => {
