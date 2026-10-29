@@ -8,25 +8,28 @@ import { outputs } from '@/content/outputs';
 import { profile } from '@/content/profile';
 import { localize } from '@/lib/content';
 
-export function ResumePage() {
+export function ResumePage({ embedded = false }: { embedded?: boolean }) {
   const { language } = useSite();
   const zh = language === 'zh';
+  const Wrapper = embedded ? 'article' : 'main';
   return (
-    <main className="resume-page">
-      <div className="resume-toolbar">
-        <FullPageLink href="/" className="studio-secondary">
-          <ArrowLeft size={16} />
-          {zh ? '返回个人主页' : 'Back to portfolio'}
-        </FullPageLink>
-        <button
-          type="button"
-          className="studio-primary"
-          onClick={() => window.print()}
-        >
-          <Printer size={16} />
-          {zh ? '打印 / 保存为 PDF' : 'Print / Save as PDF'}
-        </button>
-      </div>
+    <Wrapper className="resume-page">
+      {!embedded && (
+        <div className="resume-toolbar">
+          <FullPageLink href="/" className="studio-secondary">
+            <ArrowLeft size={16} />
+            {zh ? '返回个人主页' : 'Back to portfolio'}
+          </FullPageLink>
+          <button
+            type="button"
+            className="studio-primary"
+            onClick={() => window.print()}
+          >
+            <Printer size={16} />
+            {zh ? '打印 / 保存为 PDF' : 'Print / Save as PDF'}
+          </button>
+        </div>
+      )}
       <header className="resume-heading">
         <div className="intro-kicker">RÉSUMÉ · {resumeUpdated}</div>
         <h1>
@@ -154,6 +157,6 @@ export function ResumePage() {
           ? `依据 ${resumeUpdated} 更新的简历整理。项目指标对应各自实验与测试条件。`
           : `Based on the résumé updated ${resumeUpdated}. Project metrics refer to their respective experiment and test conditions.`}
       </p>
-    </main>
+    </Wrapper>
   );
 }

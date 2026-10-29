@@ -1,395 +1,603 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import {
-  ArrowDown,
   ArrowUpRight,
-  CodeXml as Github,
-  Mail,
+  BookOpen,
+  Check,
+  CodeXml,
   FileText,
-  Bot,
-  Radar,
-  Code2,
-  Sparkles,
-  ArrowRight,
+  Grid2X2,
+  Home,
+  Languages,
+  Mail,
+  Minus,
+  Moon,
+  MousePointer2,
+  Plus,
+  Printer,
+  RotateCcw,
+  Sun,
+  Tags,
+  Wrench,
+  X,
 } from 'lucide-react';
-import { PortfolioScene, type SceneTopic } from '@/components/portfolio-scene';
+import { RoomScene, type RoomControls } from '@/components/room-scene';
 import { useSite } from '@/components/site-context';
 import { FullPageLink } from '@/components/full-page-link';
-import { portfolioWork, resumeUpdated, githubUrl } from '@/content/portfolio';
+import { ResumePage } from './resume-page';
+import {
+  findRoomObject,
+  roomObjects,
+  type RoomObjectId,
+  type RoomView,
+} from '@/content/room';
+import { portfolioWork, githubUrl } from '@/content/portfolio';
+import { getProject } from '@/content/projects';
+import { outputs } from '@/content/outputs';
+import { profile } from '@/content/profile';
 import { localize } from '@/lib/content';
 
 export function HomePage() {
-  const { language } = useSite();
+  const { language, toggleLanguage } = useSite();
   const zh = language === 'zh';
-  const [selected, setSelected] = useState<SceneTopic>('robotics');
-  const [filter, setFilter] = useState('all');
-  const [copied, setCopied] = useState(false);
-  const topics = {
-    robotics: {
-      icon: Bot,
-      title: zh
-        ? '让代码在真实世界行动。'
-        : 'Code that moves in the real world.',
-      body: zh
-        ? '从 ROS 移动机械臂到 STM32 平衡小车，我把感知、控制与硬件连接成可运行的系统。'
-        : 'From ROS manipulators to STM32 robots, I connect perception, control, and hardware into working systems.',
-      metric: '20',
-      metricLabel: zh ? '组机器人闭环测试' : 'robotic closed-loop test groups',
-      url: '/projects/ros-mobile-manipulator-logistics',
-    },
-    perception: {
-      icon: Radar,
-      title: zh ? '看见更远，也理解更多。' : 'See farther. Understand more.',
-      body: zh
-        ? '探索低照度视觉、车路协同和多模态大模型，并在 CARLA 闭环中检验算法。'
-        : 'Exploring low-light vision, cooperative perception, and multimodal models through CARLA closed-loop evaluation.',
-      metric: '93.5%',
-      metricLabel: zh ? 'DIONet · SAS mAP@50' : 'DIONet · SAS mAP@50',
-      url: '/projects/dionet-low-light-detection',
-    },
-    engineering: {
-      icon: Code2,
-      title: zh ? '把想法做成可以体验的作品。' : 'Ideas you can actually try.',
-      body: zh
-        ? '从交通可视化到视频分析工作台，关注完整交互、工程实现和易用的界面。'
-        : 'From traffic visualization to video workspaces, I build complete interactions and approachable interfaces.',
-      metric: 'gitcaka',
-      metricLabel: 'GitHub / Open source',
-      url: githubUrl,
-    },
-  };
-  const topic = topics[selected];
-  const TopicIcon = topic.icon;
-  const works = portfolioWork.filter(
-    (work) => filter === 'all' || work.category === filter,
+  const [active, setActive] = useState<RoomObjectId | null>(null);
+  const [readerOpen, setReaderOpen] = useState(false);
+  const [returning, setReturning] = useState(false);
+  const [status, setStatus] = useState<'loading' | 'ready' | 'failed'>(
+    'loading',
   );
+  const [night, setNight] = useState(false);
+  const [labels, setLabels] = useState(true);
+  const [inventory, setInventory] = useState(false);
+  const [view, setView] = useState<RoomView>('overview');
+  const [visited, setVisited] = useState<Set<RoomObjectId>>(new Set());
+  const [copied, setCopied] = useState<'idle' | 'ok' | 'failed'>('idle');
+  const controls = useRef<RoomControls>(null);
+  const dialog = useRef<HTMLDialogElement>(null);
+  const closeButton = useRef<HTMLButtonElement>(null);
+  const inventoryButton = useRef<HTMLButtonElement>(null);
+  const lastFocus = useRef<HTMLElement | null>(null);
+  const select = useCallback(
+    (id: RoomObjectId) => {
+      if (active || returning) return;
+      lastFocus.current = document.activeElement as HTMLElement;
+      setInventory(false);
+      setActive(id);
+      setVisited((prev) => new Set(prev).add(id));
+      if (status === 'failed') setReaderOpen(true);
+    },
+    [active, returning, status],
+  );
+  const inspectReady = useCallback(() => setReaderOpen(true), []);
+  const restored = useCallback(() => {
+    setReturning(false);
+    requestAnimationFrame(() => {
+      const target = lastFocus.current;
+      (target?.isConnected && target !== document.body
+        ? target
+        : inventoryButton.current
+      )?.focus({ preventScroll: true });
+    });
+  }, []);
+  const close = useCallback(() => {
+    if (!active) return;
+    setReaderOpen(false);
+    setActive(null);
+    if (status !== 'ready') restored();
+    else setReturning(true);
+  }, [active, status, restored]);
+  const sceneStatus = useCallback(
+    (value: 'ready' | 'failed') => {
+      setStatus(value);
+      if (value === 'failed') restored();
+      if (value === 'failed' && active) setReaderOpen(true);
+    },
+    [active, restored],
+  );
+  useEffect(() => {
+    if (readerOpen && !dialog.current?.open) {
+      dialog.current?.showModal();
+      closeButton.current?.focus();
+    } else if (!readerOpen && dialog.current?.open) dialog.current.close();
+  }, [readerOpen]);
+  useEffect(() => {
+    const key = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        if (active) {
+          e.preventDefault();
+          close();
+        } else setInventory(false);
+      }
+    };
+    document.addEventListener('keydown', key);
+    return () => document.removeEventListener('keydown', key);
+  }, [active, close]);
+  const item = active ? findRoomObject(active) : null;
+  const project = item && 'slug' in item ? getProject(item.slug) : null;
+  const chooseView = (name: RoomView) => {
+    setView(name);
+    controls.current?.view(name);
+  };
   return (
-    <main id="top" className="portfolio-home">
-      <section className="portfolio-hero studio-width">
-        <div className="portfolio-intro">
-          <div className="intro-kicker">
-            <span className="live-dot" />{' '}
-            {zh
-              ? '你好，欢迎来到我的数字空间'
-              : 'HELLO, WELCOME TO MY DIGITAL SPACE'}
-          </div>
-          <h1>
-            <span>WUKANG</span>
-            <span className="outline-name">
-              CAO<span className="name-dot">.</span>
-            </span>
-          </h1>
-          <div className="name-caption">
-            <strong>曹武康</strong>
-            <span>BUILD. EXPLORE. VALIDATE.</span>
-          </div>
-          <p className="portfolio-tagline">
-            {zh
-              ? '感知世界，构建智能。'
-              : 'Perceive the world. Build intelligence.'}
-          </p>
-          <p className="portfolio-description">
-            {zh
-              ? '重庆交通大学交通运输硕士生。热爱自动驾驶、机器人和把想法变成可交互作品的过程。'
-              : 'Transportation master’s student at Chongqing Jiaotong University. Exploring autonomous driving, robotics, and turning ideas into interactive experiences.'}
-          </p>
-          <div className="portfolio-actions">
-            <a className="studio-primary" href="#work">
-              {zh ? '探索我的作品' : 'Explore my work'}
-              <ArrowUpRight size={18} />
-            </a>
-            <FullPageLink className="studio-secondary" href="/resume">
-              <FileText size={16} />
-              {zh ? '查看简历' : 'View résumé'}
-            </FullPageLink>
-          </div>
-          <div className="hero-footnote">
-            <span className="tiny-orbit" />
-            {zh
-              ? '求职方向：自动驾驶感知 / 仿真评测 / 智能系统'
-              : 'Open to perception, evaluation & intelligent systems roles'}
-          </div>
-        </div>
-        <div className="portfolio-stage">
-          <PortfolioScene selected={selected} onSelect={setSelected} />
-          <fieldset className="scene-tabs">
-            <legend className="sr-only">
-              {zh ? '选择作品方向' : 'Select a portfolio area'}
-            </legend>
-            {(['robotics', 'perception', 'engineering'] as const).map(
-              (key, index) => {
-                const Icon = topics[key].icon;
-                return (
-                  <button
-                    type="button"
-                    key={key}
-                    aria-pressed={selected === key}
-                    onClick={() => setSelected(key)}
-                  >
-                    <span>0{index + 1}</span>
-                    <Icon size={15} />
-                    {zh
-                      ? ['机器人工程', '自动驾驶', '软件作品'][index]
-                      : ['Robotics', 'Perception', 'Software'][index]}
-                  </button>
-                );
-              },
-            )}
-          </fieldset>
-        </div>
-      </section>
-
-      <section className="selected-topic studio-width" aria-live="polite">
-        <div className="topic-icon">
-          <TopicIcon size={26} />
-        </div>
-        <div className="topic-copy">
-          <small>
-            {zh ? '正在探索' : 'NOW EXPLORING'} / {selected.toUpperCase()}
-          </small>
-          <h2>{topic.title}</h2>
-          <p>{topic.body}</p>
-        </div>
-        <div className="topic-metric">
-          <strong>{topic.metric}</strong>
-          <span>{topic.metricLabel}</span>
-        </div>
-        <FullPageLink
-          className="circle-link"
-          href={topic.url}
-          aria-label={zh ? '查看当前方向作品' : 'Explore the selected area'}
-        >
-          <ArrowUpRight size={24} />
-        </FullPageLink>
-      </section>
-      <div className="tech-ribbon studio-width">
-        <span>PYTORCH</span>
-        <i />
-        <span>CARLA</span>
-        <i />
-        <span>ROS</span>
-        <i />
-        <span>COMPUTER VISION</span>
-        <i />
-        <span>V2X</span>
-        <i />
-        <span>WEB ENGINEERING</span>
-      </div>
-
-      <section id="work" className="portfolio-work studio-width">
-        <div className="portfolio-section-top">
+    <main
+      className={`immersive-home ${night ? 'room-night' : 'room-day'}`}
+      id="top"
+    >
+      <RoomScene
+        ref={controls}
+        active={active}
+        returning={returning}
+        night={night}
+        showLabels={labels}
+        onPick={select}
+        onInspectReady={inspectReady}
+        onRestored={restored}
+        onStatus={sceneStatus}
+      />
+      <div className="room-vignette" />
+      <header className="room-header room-hud">
+        <div className="room-brand">
+          <span className="room-monogram">
+            wc<span>.</span>
+          </span>
           <div>
-            <div className="intro-kicker">
-              <span>01 / SELECTED WORK</span>
-            </div>
-            <h2>{zh ? '不止想法，还有作品。' : 'Ideas, made tangible.'}</h2>
-            <p>
-              {zh
-                ? '一部分关于智能，一部分关于创造。欢迎亲自体验。'
-                : 'Some about intelligence. Some about making things. Try them yourself.'}
-            </p>
+            <h1>{zh ? '曹武康的工作室' : 'Wukang’s studio'}</h1>
+            <p>CODE · ROBOTICS · A LITTLE CURIOSITY</p>
           </div>
-          <a
-            href={githubUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="github-link"
+        </div>
+        <div className="room-header-actions">
+          <button
+            type="button"
+            onClick={toggleLanguage}
+            aria-label={zh ? 'Switch to English' : '切换到中文'}
           >
-            <Github size={18} /> GitHub <ArrowUpRight size={17} />
-          </a>
+            <Languages size={18} />
+            <span>{zh ? 'EN' : '中'}</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setNight(!night)}
+            aria-label={
+              night
+                ? zh
+                  ? '打开日光'
+                  : 'Daylight'
+                : zh
+                  ? '切换夜晚'
+                  : 'Night mode'
+            }
+            aria-pressed={night}
+          >
+            {night ? <Moon size={18} /> : <Sun size={18} />}
+          </button>
+          <button
+            type="button"
+            onClick={() => setLabels(!labels)}
+            aria-label={
+              zh ? '显示或隐藏物件提示' : 'Show or hide object labels'
+            }
+            aria-pressed={labels}
+          >
+            <Tags size={18} />
+          </button>
+          <button
+            type="button"
+            className="inventory-trigger"
+            ref={inventoryButton}
+            aria-label={zh ? '物件目录' : 'Objects'}
+            onClick={() => setInventory(!inventory)}
+            aria-expanded={inventory}
+            aria-controls="room-inventory"
+          >
+            <Grid2X2 size={17} />
+            <span>{zh ? '物件目录' : 'Objects'}</span>
+          </button>
         </div>
-        <fieldset className="work-filters">
-          <legend className="sr-only">
-            {zh ? '作品分类' : 'Project categories'}
-          </legend>
-          {[
-            ['all', zh ? '全部作品' : 'All work'],
-            ['web', zh ? '交通可视化' : 'Traffic & Web'],
-            ['vision', zh ? '视觉应用' : 'Vision apps'],
-          ].map(([key, label]) => (
-            <button
-              type="button"
-              key={key}
-              aria-pressed={filter === key}
-              onClick={() => setFilter(key)}
-            >
-              {label}
-            </button>
-          ))}
-          <FullPageLink href="/projects">
-            {zh ? '科研与工程项目' : 'Research & engineering'}
-            <ArrowRight size={15} />
-          </FullPageLink>
-        </fieldset>
-        <div className="portfolio-work-grid">
-          {works.map((work, index) => (
-            <article
-              className={`work-item work-accent-${work.accent}`}
-              key={work.id}
-            >
-              <a
-                className="work-preview"
-                href={work.demo}
-                target="_blank"
-                rel="noreferrer"
-                aria-label={`${localize(work.title, language)} · ${zh ? '打开演示' : 'Open demo'}`}
-              >
-                <Image
-                  unoptimized
-                  src={work.image}
-                  alt={`${localize(work.title, language)} ${zh ? '界面预览' : 'interface preview'}`}
-                  loading="lazy"
-                  width={1280}
-                  height={800}
-                />
-                <span className="work-open">
-                  <ArrowUpRight size={24} />
-                </span>
-                <span className="work-number">0{index + 1}</span>
-              </a>
-              <div className="work-info">
-                <small>{work.subtitle}</small>
-                <h3>{localize(work.title, language)}</h3>
-                <p>{localize(work.description, language)}</p>
-                <div className="work-tags">
-                  {work.tags.map((tag) => (
-                    <span key={tag}>{tag}</span>
-                  ))}
-                </div>
-                <div className="work-links">
-                  <a href={work.demo} target="_blank" rel="noreferrer">
-                    {zh ? '体验演示' : 'Try demo'}
-                    <ArrowUpRight size={15} />
-                  </a>
-                  <a
-                    href={`${githubUrl}/${work.repo}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <Github size={15} />
-                    {zh ? '源代码' : 'Source'}
-                  </a>
-                  <small>{zh ? '静态示例演示' : 'Static demo'}</small>
-                </div>
-              </div>
-            </article>
-          ))}
+      </header>
+      {status === 'loading' && (
+        <div className="room-loading" role="status">
+          <span className="room-loading-orbit" />
+          <p>{zh ? '正在打开工作室…' : 'Opening the studio…'}</p>
         </div>
-      </section>
-
-      <section className="portfolio-about studio-width" id="about">
-        <div>
-          <div className="intro-kicker">02 / THE PERSON BEHIND THE CODE</div>
+      )}
+      {status === 'failed' && (
+        <div className="room-fallback">
+          <Wrench size={30} />
           <h2>
-            {zh ? (
-              <>
-                对未知保持好奇。
-                <br />
-                让结果经得起验证。
-              </>
-            ) : (
-              <>
-                Stay curious.
-                <br />
-                Make it verifiable.
-              </>
-            )}
+            {zh
+              ? '这个设备暂时无法显示 3D'
+              : '3D is unavailable on this device'}
           </h2>
           <p>
             {zh
-              ? '我是曹武康，在重庆交通大学学习交通运输。我的工作横跨视觉感知、自动驾驶仿真、机器人工程与 Web 应用。我喜欢沿着“问题—代码—系统”的路径，直到一个想法真正运行起来。'
-              : 'I’m Wukang Cao, a transportation master’s student at Chongqing Jiaotong University. My work spans visual perception, autonomous-driving simulation, robotics, and web applications. I enjoy following an idea from the problem to code and finally to a working system.'}
+              ? '仍然可以从物件目录阅读简历、查看项目。'
+              : 'You can still explore every project and the résumé through the object list.'}
           </p>
-          <FullPageLink className="studio-secondary" href="/about">
-            {zh ? '更多关于我' : 'More about me'}
-            <ArrowUpRight size={17} />
+          <button type="button" onClick={() => setInventory(true)}>
+            {zh ? '打开物件目录' : 'Explore the objects'}
+          </button>
+          <FullPageLink href="/resume">
+            {zh ? '直接阅读简历' : 'Read résumé'}
           </FullPageLink>
         </div>
-        <div className="resume-card">
-          <div className="resume-card-top">
-            <FileText size={28} />
-            <span>RÉSUMÉ / 2026</span>
-          </div>
-          <h3>
-            曹武康 <span>Wukang Cao</span>
-          </h3>
-          <p>
-            {zh
-              ? '交通运输硕士生 · 重庆交通大学'
-              : 'Transportation · Chongqing Jiaotong University'}
-          </p>
-          <div className="resume-card-facts">
-            <span>
-              <b>7</b>
-              {zh ? '个研究与工程项目' : 'research & engineering projects'}
-            </span>
-            <span>
-              <b>2</b>
-              {zh ? '篇 SCI 合著论文' : 'coauthored SCI papers'}
-            </span>
-          </div>
-          <div className="resume-card-bottom">
-            <small>
-              {zh ? '内容更新' : 'Updated'} {resumeUpdated}
-            </small>
-            <FullPageLink href="/resume">
-              {zh ? '打开完整简历' : 'Open résumé'}
-              <ArrowUpRight size={17} />
-            </FullPageLink>
-          </div>
-        </div>
-      </section>
-
-      <section className="portfolio-contact studio-width" id="contact">
-        <Sparkles size={26} />
-        <div className="intro-kicker">LET’S BUILD SOMETHING THAT MATTERS</div>
+      )}
+      <div className="room-caption room-hud">
+        <span className="room-availability">
+          <i />
+          {zh ? '正在寻找新的工作机会' : 'OPEN TO WORK'}
+        </span>
         <h2>
-          {zh
-            ? '下一个有意思的项目，\n一起做。'
-            : 'Let’s build\nsomething meaningful.'}
+          {zh ? '随便看看，\n这里有我的故事。' : 'Make yourself at home.'}
         </h2>
         <p>
-          {zh
-            ? '欢迎交流岗位机会、项目合作与有趣的想法。'
-            : 'Open to career opportunities, collaborations, and interesting ideas.'}
+          <span className="room-desktop-hint">
+            {zh
+              ? '拖动环顾 · 滚轮缩放 · 点击物件探索'
+              : 'Drag to look around · Scroll to zoom · Click to explore'}
+          </span>
+          <span className="room-touch-hint">
+            {zh
+              ? '单指环顾 · 双指缩放 · 轻触物件探索'
+              : 'Drag to orbit · Pinch to zoom · Tap to explore'}
+          </span>
         </p>
-        <a className="contact-email" href="mailto:caka152005@163.com">
-          caka152005@163.com
-          <ArrowUpRight size={24} />
-        </a>
-        <div className="contact-inline">
+      </div>
+      <div className="room-bottom room-hud">
+        <nav
+          className="room-views"
+          aria-label={zh ? '房间视角' : 'Room viewpoints'}
+        >
+          {(
+            [
+              ['overview', Home, zh ? '全景' : 'Room'],
+              ['desk', FileText, zh ? '工作台' : 'Desk'],
+              ['garage', Wrench, zh ? '机器人角' : 'Workshop'],
+              ['shelf', BookOpen, zh ? '作品架' : 'Shelf'],
+            ] as const
+          ).map(([id, Icon, label]) => (
+            <button
+              type="button"
+              key={id}
+              onClick={() => chooseView(id)}
+              aria-pressed={view === id}
+              disabled={!!active || returning || status !== 'ready'}
+            >
+              <Icon size={17} />
+              <span>{label}</span>
+            </button>
+          ))}
+        </nav>
+        <div className="room-zoom">
           <button
             type="button"
-            onClick={async () => {
-              try {
-                await navigator.clipboard.writeText('caka152005@163.com');
-                setCopied(true);
-              } catch {
-                setCopied(false);
-              }
-            }}
+            onClick={() => controls.current?.zoom(0.85)}
+            aria-label={zh ? '缩小房间' : 'Zoom out'}
+            disabled={status !== 'ready' || !!active || returning}
           >
-            <Mail size={15} />
-            {copied
-              ? zh
-                ? '邮箱已复制'
-                : 'Email copied'
-              : zh
-                ? '复制邮箱'
-                : 'Copy email'}
+            <Minus size={17} />
           </button>
-          <a href={githubUrl} target="_blank" rel="noreferrer">
-            <Github size={15} />
-            GitHub / gitcaka
-          </a>
+          <button
+            type="button"
+            onClick={() => controls.current?.zoom(1.17)}
+            aria-label={zh ? '放大房间' : 'Zoom in'}
+            disabled={status !== 'ready' || !!active || returning}
+          >
+            <Plus size={17} />
+          </button>
+          <button
+            type="button"
+            onClick={() => chooseView('overview')}
+            aria-label={zh ? '重置房间视角' : 'Reset room view'}
+            disabled={status !== 'ready' || !!active || returning}
+          >
+            <RotateCcw size={16} />
+          </button>
         </div>
-        <a className="back-home" href="#top">
-          <ArrowDown size={18} />
-          {zh ? '回到顶部' : 'Back to top'}
+      </div>
+      <div className="room-progress room-hud">
+        <span>
+          {String(visited.size).padStart(2, '0')} / {roomObjects.length}
+        </span>
+        {zh ? '个物件已探索' : 'objects explored'}
+        <a href={githubUrl} target="_blank" rel="noreferrer">
+          <CodeXml size={15} />
+          gitcaka
+          <ArrowUpRight size={13} />
         </a>
-      </section>
+      </div>
+      {active && !readerOpen && (
+        <div className="room-picking" role="status">
+          <MousePointer2 size={16} />
+          {zh ? '拿起查看…' : 'Taking a closer look…'}
+          <button type="button" onClick={close}>
+            {zh ? '放回' : 'Put back'}
+          </button>
+        </div>
+      )}
+      {inventory && (
+        <aside
+          className="room-inventory room-hud"
+          id="room-inventory"
+          aria-label={zh ? '物件目录' : 'Object directory'}
+        >
+          <div className="inventory-heading">
+            <div>
+              <small>THE OBJECTS IN MY ROOM</small>
+              <h2>
+                {zh ? '每件物品，都有故事。' : 'Every object has a story.'}
+              </h2>
+            </div>
+            <button
+              type="button"
+              onClick={() => setInventory(false)}
+              aria-label={zh ? '关闭目录' : 'Close directory'}
+            >
+              <X size={18} />
+            </button>
+          </div>
+          <div className="inventory-items">
+            {roomObjects.map((object, index) => (
+              <button
+                type="button"
+                key={object.id}
+                onClick={() => select(object.id)}
+              >
+                <span>{String(index + 1).padStart(2, '0')}</span>
+                <div>
+                  <strong>{object.label[language]}</strong>
+                  <small>{object.hint[language]}</small>
+                </div>
+                {visited.has(object.id) ? (
+                  <Check size={16} />
+                ) : (
+                  <ArrowUpRight size={16} />
+                )}
+              </button>
+            ))}
+          </div>
+          <div className="inventory-footer">
+            <FullPageLink href="/resume">
+              {zh ? '简历网页 / 打印版' : 'Résumé / printable version'}
+              <ArrowUpRight size={14} />
+            </FullPageLink>
+            <FullPageLink href="/projects">
+              {zh ? '全部工程项目' : 'All engineering projects'}
+              <ArrowUpRight size={14} />
+            </FullPageLink>
+          </div>
+        </aside>
+      )}
+      <dialog
+        ref={dialog}
+        className={`room-reader ${item?.kind === 'resume' ? 'is-paper' : ''}`}
+        aria-labelledby="reader-title"
+        onCancel={(e) => {
+          e.preventDefault();
+          close();
+        }}
+        onPointerDown={(e) => e.stopPropagation()}
+        onPointerUp={(e) => e.stopPropagation()}
+      >
+        <div className="reader-toolbar">
+          <div>
+            <span className="reader-object-dot" />
+            <h2 id="reader-title">{item?.label[language]}</h2>
+            <small>{zh ? '来自曹武康的工作室' : 'FROM WUKANG’S STUDIO'}</small>
+          </div>
+          <div>
+            {item?.kind === 'resume' && (
+              <button
+                type="button"
+                onClick={() => window.print()}
+                aria-label={zh ? '打印简历' : 'Print résumé'}
+              >
+                <Printer size={17} />
+              </button>
+            )}
+            <button
+              type="button"
+              ref={closeButton}
+              onClick={close}
+              className="reader-close"
+            >
+              <X size={18} />
+              <span>{zh ? '放回房间' : 'Put it back'}</span>
+            </button>
+          </div>
+        </div>
+        <div className="reader-content" key={active}>
+          {item?.kind === 'resume' && <ResumePage embedded />}
+          {item?.kind === 'works' && (
+            <div className="room-work-content">
+              <small className="reading-kicker">ON MY SCREEN / GITCAKA</small>
+              <h3>
+                {zh ? '把想法，做成作品。' : 'Ideas you can actually try.'}
+              </h3>
+              <p>
+                {zh
+                  ? '这些是我的公开 Web 作品。点击演示亲自体验，或到 GitHub 查看代码。'
+                  : 'Explore my public web projects through their live demos and source code.'}
+              </p>
+              <div className="room-work-grid">
+                {portfolioWork.map((work) => (
+                  <article key={work.id}>
+                    <a href={work.demo} target="_blank" rel="noreferrer">
+                      <Image
+                        unoptimized
+                        src={work.image}
+                        width={1280}
+                        height={800}
+                        alt={work.title[language]}
+                      />
+                    </a>
+                    <h4>{work.title[language]}</h4>
+                    <p>{work.description[language]}</p>
+                    <div>
+                      <a href={work.demo} target="_blank" rel="noreferrer">
+                        {zh ? '体验演示' : 'Try demo'}
+                        <ArrowUpRight size={14} />
+                      </a>
+                      <a
+                        href={`${githubUrl}/${work.repo}`}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <CodeXml size={14} />
+                        {zh ? '代码' : 'Code'}
+                      </a>
+                      <small>{zh ? '静态示例' : 'Static demo'}</small>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          )}
+          {project && (
+            <div className="room-project-content">
+              <small className="reading-kicker">
+                {localize(project.category, language)}
+              </small>
+              <h3>{localize(project.title, language)}</h3>
+              <p className="reading-lead">
+                {localize(project.summary, language)}
+              </p>
+              <div className="reading-tech">
+                {project.technologies.map((tech) => (
+                  <span key={tech}>{tech}</span>
+                ))}
+              </div>
+              <div className="reading-metrics">
+                {project.highlights[language].map((value) => (
+                  <span key={value}>
+                    <Check size={15} />
+                    {value}
+                  </span>
+                ))}
+              </div>
+              {[
+                [zh ? '我的工作' : 'My contribution', project.role],
+                [
+                  zh ? '如何实现' : 'Implementation',
+                  project.details.implementation,
+                ],
+                [
+                  zh ? '验证与结果' : 'Validation & results',
+                  project.details.result,
+                ],
+              ].map(([title, body]) => (
+                <section key={title as string}>
+                  <h4>{title as string}</h4>
+                  <p>
+                    {localize(body as { zh: string; en: string }, language)}
+                  </p>
+                </section>
+              ))}
+              <FullPageLink
+                className="reading-primary"
+                href={`/projects/${project.slug}`}
+              >
+                {zh ? '阅读完整项目' : 'Read the full project'}
+                <ArrowUpRight size={16} />
+              </FullPageLink>
+            </div>
+          )}
+          {item?.kind === 'publications' && (
+            <div className="room-publications">
+              <small className="reading-kicker">
+                RESEARCH NOTES & MILESTONES
+              </small>
+              <h3>{zh ? '书架上的积累。' : 'Notes from the journey.'}</h3>
+              <h4>{zh ? '合著论文' : 'Coauthored papers'}</h4>
+              {outputs
+                .filter((o) => o.type === 'publication')
+                .map((paper) => (
+                  <article key={paper.id}>
+                    <small>
+                      {paper.year} · {paper.status[language]}
+                    </small>
+                    <h4>{paper.title.en}</h4>
+                    <p>{paper.summary[language]}</p>
+                  </article>
+                ))}
+              <h4>{zh ? '竞赛与荣誉' : 'Competitions & awards'}</h4>
+              <ul>
+                {outputs
+                  .filter((o) => o.type === 'award')
+                  .map((award) => (
+                    <li key={award.id}>
+                      <span>{award.year}</span>
+                      <div>
+                        {award.title[language]}
+                        <small>{award.status[language]}</small>
+                      </div>
+                    </li>
+                  ))}
+              </ul>
+            </div>
+          )}
+          {item?.kind === 'contact' && (
+            <div className="room-contact-card">
+              <small className="reading-kicker">NICE TO MEET YOU</small>
+              <h3>
+                {zh ? '曹武康' : 'Wukang Cao'}
+                <span>{zh ? 'Wukang Cao' : '曹武康'}</span>
+              </h3>
+              <p>{profile.bio[language]}</p>
+              <a className="room-card-email" href="mailto:caka152005@163.com">
+                <Mail size={20} />
+                caka152005@163.com
+                <ArrowUpRight size={18} />
+              </a>
+              <div className="room-contact-links">
+                <button
+                  type="button"
+                  onClick={async () => {
+                    try {
+                      await navigator.clipboard.writeText('caka152005@163.com');
+                      setCopied('ok');
+                    } catch {
+                      setCopied('failed');
+                    }
+                  }}
+                >
+                  {copied === 'ok'
+                    ? zh
+                      ? '已复制邮箱'
+                      : 'Email copied'
+                    : zh
+                      ? '复制邮箱'
+                      : 'Copy email'}
+                </button>
+                <a href={githubUrl} target="_blank" rel="noreferrer">
+                  <CodeXml size={16} />
+                  GitHub / gitcaka
+                  <ArrowUpRight size={15} />
+                </a>
+              </div>
+              <p className="copy-status" role="status">
+                {copied === 'failed'
+                  ? zh
+                    ? '复制未成功，可以选中上方邮箱复制。'
+                    : 'Copy failed. Select the email above to copy it manually.'
+                  : ''}
+              </p>
+              <div className="card-signature">
+                let’s build something meaningful.
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="reader-bottom">
+          <span>
+            {zh
+              ? '按 Esc 或点击右上角，放回房间'
+              : 'Press Esc or close to return this object to the room'}
+          </span>
+          <span>WUKANG CAO · 2026</span>
+        </div>
+      </dialog>
     </main>
   );
 }

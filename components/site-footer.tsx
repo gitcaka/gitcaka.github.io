@@ -1,12 +1,15 @@
 'use client';
 
 import { ArrowUp } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 import { LogoMark } from './logo';
 import { useSite } from './site-context';
 import { FullPageLink } from './full-page-link';
 
 export function SiteFooter() {
   const { language, t } = useSite();
+  const pathname = usePathname();
+  if (pathname === '/') return null;
   return (
     <footer className="site-footer">
       <div className="footer-inner">

@@ -18,6 +18,7 @@ import { useSite } from './site-context';
 export function SiteHeader() {
   const pathname = usePathname();
   const { language, toggleLanguage, theme, cycleTheme, t } = useSite();
+  if (pathname === '/') return null;
   const links = [
     ['/', t.nav.home],
     ['/projects', t.nav.projects],

@@ -1,4 +1,4 @@
-# 3D portfolio verification · 2026-10-29
+# Explorable 3D studio verification · 2026-10-29
 
 ## Content
 
@@ -9,15 +9,16 @@
 
 ## Validation performed
 
-- TypeScript check and Oxlint passed.
-- Sites production build completed; Three.js is lazy imported. The build reports a large-chunk notice for the 3D library.
-- 18 desktop browser checks passed: WebGL canvas, drag rendering, zoom rendering, topic selection, filters, all screenshot assets, language switch and persistence, latest résumé, navigation and horizontal overflow.
-- Six 390 px touch/mobile checks passed: layout, topic selection, native menu link to résumé, résumé width, filters and light theme.
-- Production Worker tested locally with Wrangler: HTTP 200, real WebGL rendering, monitor/robot raycast selection, résumé navigation, reduced-motion behavior and WebGL fallback. Normal runtime had no browser errors.
-- Chinese résumé printed to two A4 pages; both rendered pages visually reviewed. Print styles force a light page and keep project entries together.
-- All original routes remain. Desktop and mobile internal navigation use native anchors.
+- TypeScript check and Sites production build passed. Three.js, OrbitControls and the room builder are loaded asynchronously. The build reports a large-chunk notice for the 3D library.
+- The homepage is a full-viewport, procedural 3D room with 11 mapped objects, physical paper/card pickup and restoration, camera approach for project objects, four camera presets, day/night lighting and skyline, labels and an object directory. The previous exhibit component was removed.
+- Desktop browser checks at 1440 × 1000: direct paper raycast, drag-and-return without accidental selection, all 11 readers, four Web demo screenshots/links, all four camera presets, English labels, Esc/close, and directory focus restoration.
+- Mobile Chromium emulation at 390 × 844: two-finger pinch without selection, touch directory and reader, vertically scrollable résumé without horizontal overflow, English directory and 844 × 390 landscape. This is browser touch emulation, not a physical-phone test.
+- Local production Worker tested on port 3001: real WebGL rendering, résumé pickup, project detail native navigation and return to homepage, reduced-motion selection/return, and forced WebGL-unavailable fallback with accessible directory and latest résumé. Normal runtime checks reported no page errors; forced WebGL failure is intentional.
+- Verified return-animation locking with a rapid second directory selection, then a successful later selection. Cancellation during pickup and cancellation before the first animation frame both leave the room usable.
+- Chinese résumé printed from inside the room reader to two A4 pages. Both pages were rendered and visually inspected; heading styles no longer inherit the project reader's large display size.
+- All original routes remain; internal navigation uses native anchors. No new backend or private résumé upload was added.
 
-The validation scripts, screenshots, and print PDF are retained in the parent task workspace, outside the deployable project.
+The validation scripts, screenshots and print PDF are retained in `../output/playwright/` outside the deployable project. Key artifacts: `room-production-final.png`, `room-production-night.png`, `room-mobile-final.png`, `room-mobile-resume.png`, and `room-resume-print.pdf`.
 
 ## Publication state
 
